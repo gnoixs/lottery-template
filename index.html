@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="format-detection" content="email=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="full-screen" content="yes">
+  <meta name="browsermode" content="application">
+  <meta name="x5-orientation" content="portrait">
+  <meta name="x5-fullscreen" content="true">
+  <meta name="x5-page-mode" content="app">
+  <!--清除缓存-->
+  <!--<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+  <meta http-equiv="Pragma" content="no-cache"/>
+  <meta http-equiv="Expires" content="0"/>-->
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
+
+  <!--百度地图-->
+  <!--<script src="http://api.map.baidu.com/api?v=2.0&ak=abcs"></script>-->
+
+</head>
+
+
+<style type="text/css">
+
+
+  .color1 {
+    background: #146cdc !important;
+  }
+
+  .color_money {
+    color: #5084e2 !important;
+  }
+
+  /*选中的球状态*/
+  .active1 {
+    border: 1px solid red !important;
+  }
+
+  /*导航选中*/
+  .active8 {
+    background: #1f97f6 !important;
+    color: #ff6000;
+  }
+
+  /*赔率色*/
+  .odd {
+    color: #5084e2 !important;
+  }
+
+  /*球背景*/
+  .color4 {
+    background: white !important;
+  }
+
+  /*游戏选中*/
+  .active3 {
+    border: 1px solid #3261d8 !important;
+
+  }
+
+  .active3 span:nth-child(2) {
+    background: #3261d8 !important;
+    color: #fff !important;
+  }
+
+  /*游戏标题*/
+  .colortitle {
+    background: -webkit-radial-gradient(#555, #2a2926) !important;
+    color: #fff !important;
+  }
+
+  /*选中个数*/
+  .color_shuzi {
+    background: red !important;
+    color: #fff !important;
+  }
+
+  /*我的头*/
+  .my_1 {
+    /*color: #fff;*/
+    background: url(static/images/blue1.png) no-repeat !important;
+  }
+
+  /*我的头 文字*/
+  .my_1 p {
+    color: #9ab4ed !important;
+  }
+
+  /*六合彩导航色*/
+  .nav_o_1 li {
+    background: #1366dc;
+  }
+
+  /*资金管理 存 取 记录*/
+  .mu-tab-active {
+    background: #166ade !important;
+  }
+
+  /* 彩票名字logo*/
+  .logo {
+    width: 6.9rem;
+    height: 1.8rem;
+    background: url(static/images/a_li.png) no-repeat !important;
+    background-size: 100% 100% !important;
+  }
+
+  /*个人资料图标*/
+  .ziji {
+    background-image: url(static/images/info.png)!important;
+    background-repeat: no-repeat;
+    background-size: 100% 100% !important;
+  }
+
+  /*下注历史图标*/
+  .hist {
+    background-image: url(static/images/account.png) !important;
+    background-repeat: no-repeat;
+    background-size: 100% 100% !important;
+  }
+
+  /*我的密码图标*/
+  .pass {
+    background: url(static/images/password.png) no-repeat !important;
+    background-size: 100% 100% !important;
+  }
+
+
+  /*邮箱*/
+  .recommend {
+    background: url(static/images/recommend.png) no-repeat !important;
+    background-size: 100% 100% !important;
+  }
+
+
+
+  -->
+  <!-- /*在线客服图标*/
+  -->
+
+  .kefu {
+    background: url(static/images/service.png) no-repeat !important;
+    background-size: 100% 100% !important;
+  }
+
+  /*登出图标*/
+  .dengchu {
+    background: url(static/images/dc.png) no-repeat !important;
+    background-size: 100% 100% !important;
+  }
+
+  .fffhui {
+    background: url(static/images/fanhui.png) no-repeat !important;
+    background-size: 80% 90% !important;
+  }
+
+  .game_login{
+    background: url(static/images/game_login.png);
+  }
+
+  .wo_de{
+    background: url(static/images/wo_de.png);
+  }
+
+  /*跳转到电脑端*/
+  .ali_pc{
+    background-image: url(static/images/H2.png)!important;
+  }
+
+  /*LOGO图片*/
+  .user_login{
+    background: url(static/images/logo_login.png)!important;
+  }
+  .logoali{
+     background: url(static/images/logoali.png)!important;
+      background-size: 100% 100% !important;
+  }
+  .logoazhu{
+     background: url(static/images/zhu.png)!important;
+      background-size: 100% 100% !important;
+  }
+  .zhanhao{
+    background: url(static/images/user_login.png)!important;
+    background-size: 100% 100% !important;
+  }
+   .loc{
+    background: url(static/images/lock.png)!important;
+    background-size: 100% 100% !important;
+  }
+
+.openEyes{
+  background: url(static/images/icon-eyes.png) no-repeat !important;
+  background-size: 100% 100% !important;
+  height: 0.8rem !important;
+  width: 1rem !important;
+  top:1rem !important;
+}
+
+.avatar{
+  background-image: url(static/images/avatar.png);
+  background-repeat: no-repeat;
+}
+
+.avatar_bg{
+  background-image: url(static/images/avatar_bg.jpg);
+  background-repeat: no-repeat;
+}
+
+.e_mail{
+  background-image: url(static/images/e_mail.png);
+  background-repeat: no-repeat;
+}
+
+.lock_money{
+  background-image: url(static/images/lock_money.png);
+  background-repeat: no-repeat;
+}
+
+.hook{
+  background-image: url(static/images/hook.png);
+  background-repeat: no-repeat;
+}
+
+.lock_my{
+  background-image: url(static/images/lock_my.png);
+  background-repeat: no-repeat;
+}
+
+.sm_avatar{
+  background-image: url(static/images/sm_avatar.png);
+  background-repeat: no-repeat;
+}
+
+.service_my{
+  background-image: url(static/images/service_my.png);
+  background-repeat: no-repeat;
+}
+
+.note_my{
+  background-image: url(static/images/note_my.png);
+  background-repeat: no-repeat;
+}
+
+.money_my{
+  background-image: url(static/images/money_my.png);
+  background-repeat: no-repeat;
+}
+
+</style>
+
+
+
+<!--<style>-->
+
+
+  <!--/*头部，导航*/-->
+  <!--.color1{-->
+    <!--background: #e60d39!important;-->
+  <!--}-->
+  <!--.color_money{-->
+    <!--color: #e60d39!important;-->
+  <!--}-->
+  <!--/*选中的球状态*/-->
+  <!--.active1{-->
+    <!--border:1px solid red!important;-->
+  <!--}-->
+  <!--/*导航选中*/-->
+  <!--.active8{-->
+    <!--background: #f3a518!important;-->
+    <!--color:#ff6000;-->
+  <!--}-->
+  <!--/*赔率色*/-->
+  <!--.odd{-->
+    <!--color: red !important;-->
+  <!--}-->
+  <!--/*球背景*/-->
+  <!--.color4{-->
+    <!--background: white!important;-->
+  <!--}-->
+  <!--/*游戏选中*/-->
+  <!--.active3 {-->
+    <!--border: 1px solid #e60d39!important;-->
+
+  <!--}-->
+  <!--.active3 span:nth-child(2){-->
+    <!--background: #e60d39!important;-->
+    <!--color: #fff !important;-->
+  <!--}-->
+  <!--/*游戏标题*/-->
+  <!--.colortitle{-->
+    <!--background: -webkit-radial-gradient(#555,#2a2926)!important;-->
+    <!--color: #fff!important;-->
+  <!--}-->
+
+  <!--/*选中个数*/-->
+  <!--.color_shuzi{-->
+    <!--background: #f3a518!important;-->
+    <!--color: #fff!important;-->
+  <!--}-->
+  <!--/*我的头*/-->
+  <!--.my_1{-->
+    <!--/*color: #fff;*/-->
+    <!--background: url(static/images/my1.png) no-repeat!important;-->
+  <!--}-->
+  <!--/*我的头 文字*/-->
+  <!--.my_1 p{-->
+    <!--color: #fff !important;-->
+  <!--}-->
+  <!--/*六合彩导航色*/-->
+  <!--.nav_o_1 li{-->
+    <!--background: #e60d39;-->
+  <!--}-->
+  <!--/*资金管理 存 取 记录*/-->
+  <!--.mu-tab-active{-->
+    <!--background:#e60d39!important;-->
+  <!--}-->
+  <!--/* 彩票名字logo*/-->
+  <!--/*首页border-left*/-->
+  <!--.border_left{-->
+    <!--border-color: #f2a51b!important;-->
+  <!--}-->
+
+  <!--/*开奖时间颜色*/-->
+  <!--.run_lottery{-->
+    <!--background: #f3a518!important;-->
+    <!--color: #fff!important;-->
+  <!--}-->
+  <!--.run_lottery_b{-->
+    <!--color: #e60d39!important;-->
+    <!--background: white!important;-->
+    <!--border: 1px solid red;-->
+    <!--border-top-left-radius: 0.21rem;-->
+  <!--}-->
+
+  <!--.logo{-->
+    <!--width: 6.9rem;-->
+    <!--height: 1.8rem ;-->
+    <!--background: url(static/images/guang_da.png) no-repeat!important;-->
+    <!--background-size: 100% 100% !important;-->
+  <!--}-->
+  <!--/*个人资料图标*/-->
+  <!--.ziji{-->
+    <!--background:url(static/images/redziji.png) no-repeat!important;-->
+    <!--background-size: 100% 100% !important;-->
+  <!--}-->
+  <!--/*下注历史图标*/-->
+  <!--.hist{-->
+    <!--background: url(static/images/redhist.png) no-repeat!important;-->
+    <!--background-size: 100% 100% !important;-->
+
+  <!--}-->
+  <!--/*我的密码图标*/-->
+  <!--.pass{-->
+    <!--background:url(static/images/redpass.png) no-repeat!important;-->
+    <!--background-size: 100% 100% !important;-->
+  <!--}-->
+  <!--/*在线客服图标*/-->
+  <!--.kefu{-->
+    <!--background: url(static/images/redkefu.png) no-repeat!important;-->
+    <!--background-size: 100% 100% !important;-->
+  <!--}-->
+  <!--/*登出图标*/-->
+  <!--.dengchu{-->
+    <!--background:url(static/images/reddeng.png) no-repeat!important;-->
+    <!--background-size: 100% 100% !important;-->
+  <!--}-->
+  <!--.fffhui{-->
+    <!--background:url(static/images/fffhui.png) no-repeat!important;-->
+    <!--background-size: 80% 90% !important;-->
+  <!--}-->
+
+  <!--/*app下载*/-->
+  <!--.gd_gb_app{-->
+    <!--background:url(static/images/gd_app.png) no-repeat!important;-->
+    <!--background-size: 1rem 0.851rem!important;-->
+  <!--}-->
+
+  <!--/*!*跳转到电脑端*!*/-->
+  <!--.gd_gb_pc{-->
+    <!--background:url(static/images/gd_pc.png) no-repeat!important;-->
+    <!--background-size: 1rem 0.851rem!important;-->
+  <!--}-->
+
+  <!--/*!*客服*!*/-->
+  <!--.gd_gb_service{-->
+    <!--background:url(static/images/gd_kf.png) no-repeat!important;-->
+    <!--background-size: 1rem 0.851rem!important;-->
+  <!--}-->
+
+
+  <!--.game_login {-->
+    <!--background-image: url(static/images/game_login_gd.png);-->
+  <!--}-->
+
+  <!--.wo_de {-->
+    <!--background-image: url(static/images/wo_de_gd.png);-->
+  <!--}-->
+
+  <!--.ali_pc{-->
+  <!--background-image: url(static/images/gd_pc.png);-->
+  <!--}-->
+
+  <!--.inde_bg{-->
+    <!--background: #EEEEEE!important;-->
+  <!--}-->
+
+  <!--.inde_co{-->
+    <!--color: #666!important;-->
+  <!--}-->
+
+  <!--.kefu {-->
+    <!--background: url(static/images/service.png) no-repeat !important;-->
+    <!--background-size: 100% 100% !important;-->
+  <!--}-->
+
+  <!--/*登出图标*/-->
+  <!--.dengchu {-->
+    <!--background: url(static/images/dc.png) no-repeat !important;-->
+    <!--background-size: 100% 100% !important;-->
+  <!--}-->
+
+  <!--.fffhui {-->
+    <!--background: url(static/images/fanhui.png) no-repeat !important;-->
+    <!--background-size: 80% 90% !important;-->
+  <!--}-->
+
+
+  <!--/*LOGO图片*/-->
+  <!--.user_login{-->
+    <!--background: url(static/images/logo_login.png)!important;-->
+  <!--}-->
+
+  <!--.zhanhao{-->
+    <!--background: url(static/images/user_login.png)!important;-->
+    <!--background-size: 100% 100% !important;-->
+  <!--}-->
+  <!--.loc{-->
+    <!--background: url(static/images/lock.png)!important;-->
+    <!--background-size: 100% 100% !important;-->
+  <!--}-->
+
+  <!--.openEyes{-->
+    <!--background: url(static/images/icon-eyes.png) no-repeat !important;-->
+    <!--background-size: 100% 100% !important;-->
+    <!--height: 0.8rem !important;-->
+    <!--width: 1rem !important;-->
+    <!--top:1rem !important;-->
+  <!--}-->
+
+  <!--.avatar{-->
+    <!--background-image: url(static/images/avatar.png);-->
+    <!--background-repeat: no-repeat;-->
+  <!--}-->
+
+  <!--.avatar_bg{-->
+    <!--background-image: url(static/images/avatar_bg.jpg);-->
+    <!--background-repeat: no-repeat;-->
+  <!--}-->
+
+  <!--.e_mail{-->
+    <!--background-image: url(static/images/e_mail.png);-->
+    <!--background-repeat: no-repeat;-->
+  <!--}-->
+
+  <!--.lock_money{-->
+    <!--background-image: url(static/images/lock_money.png);-->
+    <!--background-repeat: no-repeat;-->
+  <!--}-->
+
+  <!--.hook{-->
+    <!--background-image: url(static/images/hook.png);-->
+    <!--background-repeat: no-repeat;-->
+  <!--}-->
+
+  <!--.lock_my{-->
+    <!--background-image: url(static/images/lock_my.png);-->
+    <!--background-repeat: no-repeat;-->
+  <!--}-->
+
+  <!--.sm_avatar{-->
+    <!--background-image: url(static/images/sm_avatar.png);-->
+    <!--background-repeat: no-repeat;-->
+  <!--}-->
+
+  <!--.service_my{-->
+    <!--background-image: url(static/images/service_my.png);-->
+    <!--background-repeat: no-repeat;-->
+  <!--}-->
+
+  <!--.note_my{-->
+    <!--background-image: url(static/images/note_my.png);-->
+    <!--background-repeat: no-repeat;-->
+  <!--}-->
+
+  <!--.money_my{-->
+    <!--background-image: url(static/images/money_my.png);-->
+    <!--background-repeat: no-repeat;-->
+  <!--}-->
+
+
+
+
+<!--</style>-->
+
+
+
+
+<body>
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
+
+  <script src="/static/global.config.js"></script>
+</body>
+<!--百度地图-->
+<!--<script src="http://api.map.baidu.com/api?ak=KpDHwE2VjMXILCkuQ4Cyu7LghaO7Mnim&v=2.0"></script>-->
+<!--<script src="http://api.map.baidu.com/api?v=2.0&ak=abcs"></script>-->
+
+</html>
