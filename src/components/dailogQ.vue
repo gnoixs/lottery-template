@@ -1,7 +1,7 @@
 <template>
 <div class="">
 
-  <div class="is-active" @click="hideDailog" v-if="!isHao">
+  <div class="is-active" v-if="!isHao">
 
     <div class="modal-content" v-show="loading">
       <div class="title">投注明细</div>
@@ -27,14 +27,12 @@
           <span class="color_money" style="color: #0a44e1;">{{zonghe}}元</span>
         </div>
       </div>
-      <footer class="color1">
+      <footer class="color1 gdcolor">
         <span @click.stop="xiazhu">确认</span>
-        <span>取消</span>
+        <span @click="hideDailog" >取消</span>
       </footer>
     </div>
-
   </div>
-
   <div class="loading" v-show="!loading && !isHao">
     <div class="loader-inner line-spin-fade-loader">
       <div></div>
@@ -50,12 +48,19 @@
 
     <div v-show="isHao">
       <div class="modal_box_feedback">
-        <div>{{title}}</div>
+         <div class="modal_div">
+        		<div class="modal_header color1">
+        			<span>通知</span>
+        			<i></i>
+        		</div>
+        		<div class="modal_foot">
+        			<div ref="rscenter"></div>
+        			<p>{{title}}</p>
+        		</div>
+        </div>
       </div>
     </div>
-
   <div >
-
   </div>
 </div>
 </template>
@@ -64,16 +69,18 @@
 
 
 export default {
-
   data() {
     return {
+    	is_gd_ali: is_gd_ali(),
       lotteryS: [],
       lengths: 0,
       zonghe: 0,
       odd: {},
       title: "",
       loading:true,
-      isHao: false
+      isHao: false,
+      newHao:false,
+      bgimg:'../../static/images/suuccen.png'
     }
   },
   mounted() {
@@ -101,7 +108,6 @@ export default {
   created() {
 
     this.lotteryS = this.lotteryM;
-
     for (let i = 0; i < this.lotteryS.length; i++) {
       this.lotteryS[i].money = this.money;
       let s = this.lotteryS[i].key_s;
@@ -111,35 +117,38 @@ export default {
     }
 
     // for (let key in this.lotteryS) {
-    //
     //   // key.money = 2;
     //   this.lotteryS[key].money = this.money;
     //   let s = this.lotteryS[key].key_s;
     //   this.odd[s] = this.money;
-
     //   this.lengths++;
     //   this.zonghe = this.lengths * this.money
     // }
 
   },
-  beforeUpdate() {
-
-
+  beforeUpdate(){
   },
   methods: {
     sendParent(){
       this.$emit("listenToChildEvent",true);
     },
     delt(j) {
-
-      this.lotteryS.splice(j, 1)
-      this.lengths--;
-      this.zonghe = this.lengths * this.money;
+      this.lengths=0;
+      this.zonghe=0;
+      this.odd = {};
+      this.lotteryS.splice(j, 1);
+      console.log(this.lotteryS);
+    for (let i = 0; i < this.lotteryS.length; i++) {
+      this.lotteryS[i].money = this.money;
+      let s = this.lotteryS[i].key_s;
+      this.odd[s] = this.money;
+      this.lengths++;
+      this.zonghe = this.lengths * this.money
+    }
       if (this.lengths === 0) {
         this.sendParent();
         this.$store.dispatch('hideDailogQ')
       }
-
     },
     kadun(){
 
@@ -147,34 +156,41 @@ export default {
     xiazhu() {
       console.log(111)
       this.loading=false
-
-
-
       let oidInfo = getOid();
       this.odd.oid = oidInfo;
       this.odd.game_code = this.game_code;
       this.odd.type_code = this.type_code;
       this.odd.round = this.round;
-
       this.$http.post(`${getUrl()}/inup`, JSON.stringify(this.odd), {}).then(res => {
-
-        if ((res.data) instanceof Array) {
-          this.isHao = true;
-          this.title = "恭喜下注成功"
+       	console.log(res.data);
+       if ((res.data) instanceof Array) {
+					this.isHao = true;
+//  			this.$refs.tucenter.style.background =url('../../static/images/ll.png');
+				 	if(this.is_gd_ali){
+      			this.$refs.rscenter.style.backgroundImage="url('../../../static/images/suuccen.png')"
+	      	}else{
+	      		this.$refs.rscenter.style.backgroundImage="url('../../../static/images/gdsuuccen.png')"
+	      	}
+      		this.title = "恭喜您下注成功"
           this.sendParent();
-          setTimeout(this.hideDailog,1200);
+       		setTimeout(this.hideDailog,1200);
+        } else if(res.data.msg == 4001){
 
-        } else if(res.data.msg == 4001) {
-
+        	sessionStorage.clear();
+        	this.$refs.rscenter.style.backgroundImage="url('../../static/images/erreo.png')"
           this.isHao = true;
-          this.title = "下注失败";
+          this.title = "您的账户已失效，请重新登录";
           setTimeout(this.kadun,1200);
-          this.$router.push({
-            path: '/login'
-          })
-          setTimeout(this.hideDailog,100);
-        } else if(res.data.msg == 5001) {
+          setTimeout(() => {
+          	this.$router.push({
+            	path: '/login'
+          	})
+          },1000)
 
+          setTimeout(this.hideDailog,1000);
+
+        } else if(res.data.msg == 5001){
+        	this.$refs.rscenter.style.backgroundImage="url('../../static/images/erreo.png')"
           this.isHao = true;
           this.title = "下注项为空，金额不正确,请重新输入";
           setTimeout(this.kadun,1200);
@@ -184,34 +200,42 @@ export default {
           setTimeout(this.hideDailog,100);
         }
         else if (res.data.msg == 5002) {
+        	this.$refs.rscenter.style.backgroundImage="url('../../static/images/erreo.png')"
           this.isHao = true;
           this.title = "游戏已封盘"
           setTimeout(this.hideDailog, 1200);
         }
         else if (res.data.msg == 5003) {
+        	this.$refs.rscenter.style.backgroundImage="url('../../static/images/erreo.png')"
           this.isHao = true;
           this.title = "下注期数错误"
           this.sendParent();
           setTimeout(this.hideDailog,1200);
         }
         else if (res.data.msg == 5004) {
+        	this.$refs.rscenter.style.backgroundImage="url('../../static/images/erreo.png')"
           this.isHao = true;
           this.title = "余额不足"
+          setTimeout(this.hideDailog, 1200);
+        }
+        else if (res.data.msg == 7001) {
+        	this.$refs.rscenter.style.backgroundImage="url('../../static/images/erreo.png')"
+          this.isHao = true;
+          this.title = "PC蛋蛋同一期中的大单、大双、小单、小双只能下期中一注"
+          setTimeout(this.hideDailog, 3900);
+        }else if (res.data.msg ==3004) {
+        	this.$refs.rscenter.style.backgroundImage="url('../../static/images/erreo.png')"
+          this.isHao = true;
+          this.title = "PC蛋蛋同一期中的大单、大双、小单、小双只能下期中一注"
           setTimeout(this.hideDailog, 1200);
         }
       })
     },
     hideDailog() {
-
-
       this.$store.dispatch('hideDailogQ')
     }
-
   },
   components: {
-
-
-
   }
 }
 </script>
@@ -224,13 +248,10 @@ export default {
 .fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
   opacity: 0
 }
-
 .icon-ok {
     display: none;
 }
-
 .is-active {
-
     position: fixed;
     height: 100%;
     width: 100%;
@@ -359,22 +380,6 @@ export default {
     line-height: 2;
   }
 }
-.modal_box_feedback {
-    z-index: 99999;
-    position: fixed;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    > div {
-        background: rgba(0,0,0,0.5);
-        color: white;
-        padding: 10px 40px;
-        border-radius: 4px;
-    }
-}
 
 .loading{
   position: fixed;
@@ -470,6 +475,6 @@ export default {
     width: 5/20rem;
     height: 15/20rem;
   }
-
 }
+
 </style>

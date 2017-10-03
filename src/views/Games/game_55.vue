@@ -8,47 +8,41 @@ bj_time// 主页
 
   <lotteryHeader :title="title" :game_code=51 @regulation_click="regulation_control=true" ></lotteryHeader>
   <!-- <drawer v-show="showDrawer"></drawer> -->
-
   <!-- <dailog-q v-if="showDailogQ" :titleDate="titleDate" v-on:listenToChildEvent="changeDate"></dailog-q> -->
-
-  <lotteryArea :lotteryObj="body"  :zMoney="zMoney" :endtime="endtime" :fentime="fentime" v-if="isOk"></lotteryArea>
-
-  <div class="lottery_nav_bar">
-    <ul>
-      <button class="trapezoid color1" v-for="(item,i) in shuju" :class="{active8:item.isCheck}" @click="changeDate(item,i)">
-        <span>{{item.name}}</span>
-      </button>
-    </ul>
-  </div>
-
-  <section class='bet' ref="seller">
-    <!--<button @click="submite()" type="button">tijiao</button>-->
-    <ul>
-      <li v-for="(item,j) in lotteryList.body">
-        <span class="colortitle">{{item._name}}</span>
-        <ul>
-          <li v-for="(item,i) in item.list">
-            <button class="color4" :class="{active3:item.isCheck}" @click="isCheck(j,i,item)" :disabled="fengpan||round=='loading'">
-              <span>{{item.name}}</span>
-              <span  class="odd">{{(fengpan||round=='loading')?"封盘":item.odds}}</span>
-            </button>
-          </li>
-        </ul>
-      </li>
-    </ul>
-
-  </section>
-
+  <!--<div class="game_main">-->
+    <lotteryArea class="game_55" :lotteryObj="body"  :zMoney="zMoney" :endtime="endtime" :fentime="fentime" v-if="isOk" gameType="55"></lotteryArea>
+    <div class="lottery_nav_bar">
+      <ul>
+        <button class="trapezoid color1" v-for="(item,i) in shuju" :class="{active8:item.isCheck}" @click="changeDate(item,i)">
+          <span>{{item.name}}</span>
+        </button>
+      </ul>
+    </div>
+    <section class='bet' ref="seller">
+      <!--<button @click="submite()" type="button">tijiao</button>-->
+      <ul>
+        <li v-for="(item,j) in lotteryList.body">
+          <span class="colortitle">{{item._name}}</span>
+          <ul>
+            <li v-for="(item,i) in item.list">
+              <button class="color4" :class="{active3:item.isCheck}" @click="isCheck(j,i,item)" :disabled="fengpan||round=='loading'">
+                <span>{{item.name}}</span>
+                <span  class="odd">{{(fengpan||round=='loading')?"封盘":item.odds}}</span>
+              </button>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+  <!--</div>-->
   <section class="bet_bar">
     <div>
-        <i class="iconfont_reset"></i>
-        <span class="qin"  @click="qingkong">重置</span>
+     <!-- <i class="iconfont_reset">eaeaea</i>-->
+      <span class="qin"  @click="qingkong">重置</span>
     </div>
-    <div><input style="padding: 0!important;"  type="number" v-model="money_s" placeholder="输入金额" @input="changes_m()" min="1"/></div>
-    <div><button class="" :class="{color1:isBlue}" type="button" :disabled="!isBlue" @click="subMit">确认下注</button><span class="color_shuzi" v-show="xshuzi>0">{{xshuzi}}</span></div>
-
+    <div><span  style="color:#FFFFFF"  v-show="xshuzi>0">{{xshuzi}}</span><input style="padding: 0!important;" pattern="[0-9]*" v-model="money_s" placeholder="输入金额" @input="changes_m()" min="1"/></div>
+    <div><button class="gdcolor"  :class="{color1:isBlue}" type="button" :disabled="!isBlue" @click="subMit">确认下注</button></div>
   </section>
-
   <!-- <foot-guide></foot-guide> -->
   <div :style='de?"display:block":"display:none"' style="position: fixed;top:0;left:0;background:#000;opacity:.8;width:100%;height:100%;z-index:6">
     <div style='position: fixed;top:50%;left:50%;width:40px;height:40px;margin:-20px 0 0 -20px;'>
@@ -58,56 +52,20 @@ bj_time// 主页
   <div class="fp" v-if="fengpan">
     <!-- <span>封盘</span> -->
   </div>
-
-  <div v-show="regulation_control" class="regulation">
-    <div>
-      <div class="header_regu">
-        <div></div>
-        <h5>北京赛车</h5>
-        <div></div>
-      </div>
-      <div>
-        <p>1～10 两面：指 单、双；大、小。</p>
-      </div>
-      <div>
-        <p>单、双：号码为双数叫双，如4、8；号码为单数叫单，如5、9。</p>
-      </div>
-      <div>
-        <p>第一名～第十名 车号指定：每一个车号为一投注组合，开奖结果"投注车号"对应所投名次视为中奖，其余情形视为不中奖。</p>
-      </div>
-      <div>
-        <p>1～5龙虎</p>
-      </div>
-      <div>
-        <p>冠  军 龙/虎："第一名"车号大于"第十名"车号视为【龙】中奖、反之小于视为【虎】中奖，其余情形视为不中奖。</p>
-      </div>
-      <div>
-        <p>亚  军 龙/虎："第二名"车号大于"第九名"车号视为【龙】中奖、反之小于视为【虎】中奖，其余情形视为不中奖。</p>
-      </div>
-      <div>
-        <p>第三名 龙/虎："第三名"车号大于"第八名"车号视为【龙】中奖、反之小于视为【虎】中奖，其余情形视为不中奖。</p>
-      </div>
-      <div>
-        <p>第四名 龙/虎："第四名"车号大于"第七名"车号视为【龙】中奖、反之小于视为【虎】中奖，其余情形视为不中奖。</p>
-      </div>
-      <div>
-        <p>第五名 龙/虎："第五名"车号大于"第六名"车号视为【龙】中奖、反之小于视为【虎】中奖，其余情形视为不中奖。</p>
-      </div>
-      <div>
-        <p>冠军车号＋亚军车号＝冠亚和值（为3~19)</p>
-      </div>
-      <div>
-        <p>冠亚和单双："冠亚和值"为单视为投注"单"的注单视为中奖，为双视为投注"双"的注单视为中奖，其余视为不中奖。</p>
-      </div>
-      <div>
-        <p>冠亚和大小："冠亚和值"大于11时投注"大"的注单视为中奖，小于或等于11时投注"小"的注单视为中奖，其余视为不中奖。</p>
-      </div>
-      <div>
-        <p>冠亚和指定："冠亚和值"可能出现的结果为3～19， 投中对应"冠亚和值"数字的视为中奖，其余视为不中奖。</p>
+  <div v-show="isHao">
+      <div class="modal_box_feedback">
+         <div class="modal_div">
+        		<div class="modal_header color1">
+        			<span>通知</span>
+        			<i></i>
+        		</div>
+        		<div class="modal_foot">
+        			<div ref="rscenter"></div>
+        			<p>{{title}}</p>
+        		</div>
+        </div>
       </div>
     </div>
-    <i @click="regulation_control=false" class="icon-guanbi iconfont"></i>
-  </div>
 
 </div>
 </template>
@@ -124,12 +82,12 @@ import dailogS from '../../components/dailogQ.vue'
 //import BScroll from 'better-scroll'
 
 
-/*import {
-  loginTrue,
-  getOid,
-  getBjpk,
-  getUrl
-} from '../../api'*/
+//import {
+//  loginTrue,
+//  getOid,
+//  getBjpk,
+//  getUrl
+//} from '../../api'
 // import drawer from '../../components/drawer'
 
 export default {
@@ -139,7 +97,7 @@ export default {
       zMoney: 0,
       fentime: 30,
       type_code: 0,
-      title: "北京PK10",
+      title: "北京PK拾",
       shuju: {},
       isBlue: false,
       demo: 0,
@@ -166,7 +124,9 @@ export default {
       n_1: false,
       dadiao: "lmp",
       xshuzi: 0,
-      regulation_control:false
+      isHao:false,
+      regulation_control:false,
+      attrNames: null
       // pcznavc_a:1//二級選項卡，默認顯示兩面盤
     }
   },
@@ -181,10 +141,15 @@ export default {
         }
         this.$http.post(`${getUrl()}/getinfo/money`, JSON.stringify(prams)).then(res => {
           if (res.data.msg == "4001") {
-            // let timeStamp = res.data.next.timestap;
-            this.$router.push({
-              path: '/login'
-            }) // 跳转到登陆
+            sessionStorage.clear();
+						this.isHao = true;
+          	this.title = "您的账户已失效，请重新登录";
+            setTimeout(() => {
+	          	this.isHao = false;
+	          	this.$router.push({
+	            	path: '/login'
+	          	})
+	          },1000)
           } else {
             this.zMoney = res.data.money
             sessionStorage.setItem('im_money', JSON.stringify(res.data.money))
@@ -194,8 +159,8 @@ export default {
         })
       }
     },
-    changes_m() {
-
+    changes_m(){
+      this.money_s = this.money_s.replace(/[^0-9]/g, "");
       if (!this.isEmptyObject(this.object) && this.money_s > 0) {
         this.isBlue = true;
       } else {
@@ -289,37 +254,6 @@ export default {
       // this.dailogIs = !this.dailogIs;
     },
 
-    // subMit() {
-    //   this.oid_info = getOid();
-    //   let lottry_s = document.getElementsByClassName("input_a")
-    //   let string = '';
-    //   let money = 0;
-    //   for (let i = 0; i < lottry_s.length; i++) {
-    //     if (lottry_s[i].value > 0) {
-    //       string = `${string}&${lottry_s[i].name}=${lottry_s[i].value}`;
-    //       money = money + parseInt(lottry_s[i].value);
-    //     }
-    //   }
-    //   this.type_code = this.lotteryList.code
-    //   string = `game_code=${this.game_code}&type_code=${this.type_code}&round=${this.round}&oid=${this.oid_info}${string}`
-    //   let headers = new Headers();
-    //   headers.append('Content-Type', 'application/x-www-form-urlencoded');
-    //   this.$http.post('http://jmyl888.com/newapi/InOrder', encodeURI(string), {
-    //     headers: headers
-    //   }).then(res => {
-    //     if (res.data.error_no == 505) {
-    //       //未登陆
-    //
-    //       this.$router.push({
-    //         path: '/login'
-    //       }) //跳转到登陆
-    //     } else {
-    //       this.codeMessage = money
-    //       this.dialog = true
-    //       this.dialog = ''
-    //     }
-    //   })
-    // },
 
   },
   computed: mapGetters([
@@ -327,10 +261,20 @@ export default {
   ]),
   //初始化
   created() {
+
     this.de = true;
     let newTime = Date.parse(new Date()) / 1000;
     let oldTime = localStorage.getItem('bj_time');
     let roundCha = localStorage.getItem('bj_roundCha')
+
+
+		let params = {
+			oid:sessionStorage.getItem('im_token'),
+			game_code: 55,
+			type_code: 0
+		}
+
+
 
     if (oldTime && newTime <= oldTime && roundCha == 1) {
       this.shuju = getBjpk();
@@ -362,11 +306,18 @@ export default {
         this.de = false;
         this.isOk = true;
         if (res.data.msg == "4001") {
-          // let timeStamp = res.data.next.timestap;
-          this.$router.push({
-            path: '/login'
-          }) // 跳转到登陆
+           sessionStorage.clear();
+						this.isHao = true;
+          	this.title = "您的账户已失效，请重新登录";
+            setTimeout(() => {
+	          	this.isHao = false;
+	          	this.$router.push({
+	            	path: '/login'
+	          	})
+	          },1000)
         } else {
+        	console.log(111);
+        	console.log(res.data);
           let moneyX = sessionStorage.getItem('im_money')
           this.zMoney = parseFloat(moneyX)
           this.shuju = getBjpk();
@@ -378,6 +329,9 @@ export default {
           this.endtime = res.data.next.endtime - timeStamp;
           this.round = res.data.next.round;
           let loaclTime = this.endtime + newTime;
+          this.zMoney = res.data.lcurrency;
+          sessionStorage.setItem('im_money', JSON.stringify(res.data.lcurrency))
+
           // localStorage.setItem('bj_time', res.data.next.endtime)
           localStorage.setItem('bj_time', loaclTime)
           localStorage.setItem('bj_body', JSON.stringify(res.data))
@@ -402,10 +356,9 @@ export default {
       if (this.endtime <= 0) {
         this.isOpen = false;
         return
-      } else {
+      }else{
         this.endtime--;
         let timeStamp = Date.parse(new Date()) / 1000;
-
       }
     }, 1000)
   },
@@ -428,9 +381,15 @@ export default {
           this.isOk = true;
           let timeStamp = res.data.next.timestap;
           if (res.data.msg == 4001) { //  1未登陆
-            this.$router.push({
-              path: '/login'
-            }) // 跳转到登陆
+            sessionStorage.clear();
+						this.isHao = true;
+          	this.title = "您的账户已失效，请重新登录";
+            setTimeout(() => {
+	          	this.isHao = false;
+	          	this.$router.push({
+	            	path: '/login'
+	          	})
+	          },1000)
           } else {
             // this.shuju = getBjpk();
             // this.lotteryList = getBjpk().lmp;
@@ -443,6 +402,9 @@ export default {
             // localStorage.setItem('bj_time', res.data.next.endtime)
             localStorage.setItem('bj_time', loaclTime)
             localStorage.setItem('bj_body', JSON.stringify(res.data))
+            this.zMoney = res.data.lcurrency;
+            sessionStorage.setItem('im_money', JSON.stringify(res.data.lcurrency))
+
             // this.lotteryList = getBjpk().lmp;
             // this.$refs.seller.className = "bet";
             this.numberList = res.data.next.round;
@@ -450,9 +412,10 @@ export default {
             this.roundCha = Number(res.data.next.round) - Number(res.data.last.round);
             localStorage.setItem('bj_roundCha', JSON.stringify(this.roundCha));
             localStorage.getItem('bj_roundCha')
+
           }
 
-        })
+        });
 
 
       } else if (this.endtime <= 30 && this.endtime > 0) {
@@ -480,6 +443,8 @@ export default {
 </script>
 
 <style lang="less" rel="stylesheet/less" scoped>
+
+
 button{
   outline:none;
 }
@@ -695,16 +660,18 @@ button{
     }
     button {
         border: 0;
-        border-radius: 2px;
+       /* border-radius: 2px;*/
     }
     button:nth-of-type(1) {
         color: white;
-        background: rgba(0,0,0,0.5);
+        background: #2f64d4;
         margin-right: 7/20rem;
+
     }
     button:nth-of-type(2) {
         color: white;
         background: #78c401;
+
     }
     .disable {
         background: #376cd4;
@@ -725,7 +692,6 @@ button{
         box-shadow: 0 2/20rem 1/20rem rgba(0,0,0,0.5)
       }
     }
-
 }
 .header_bar {
     z-index: 990;
@@ -867,34 +833,52 @@ button{
           width: 86/20rem;
           padding:0;
           margin:0;
-          height: 30/20rem;
+          /*height: 30/20rem;
           line-height: 25/20rem;
           border-radius: 3/20rem;
           border: 1/20rem solid #f0f0f0;
-          box-shadow: 0 0 5/20rem #eeeeee inset;
-          text-align: center;
+          box-shadow: 0 0 5/20rem #eeeeee inset;*/
+          /*text-align: center;*/
       }
     }
      >div:nth-of-type(1){
-      width: 140/40rem;
-      // background-color: red;
+      width: 130/46.875rem;
+      background-color: #eeeeee;
+      height: 66/46.875rem;
+      line-height: 66/46.875rem;
+      border-radius: 10%;
+      border: 1px solid #eaeaea;
+      box-sizing: border-box;
+      text-align: center;
+      margin-left: 2%;
 
     }
     >div:nth-of-type(2){
-      width: 270/40rem;
+      width: 382/46.875rem;
+     /* line-height:1rem;*/
+       border: 1px solid #dedede;
+       border-radius:5/20rem;
+         >span{
+        	width:50/46.875rem;
+        	height:45/46.875rem;
+        	line-height:1.15rem;
+        	margin-right:0.2rem;
+        	display: inline-block;
+        	background:url(../../../static/images/moneybao.png) no-repeat;
+        	background-size: 100% 100%;
+        	font-size: 0.5rem;
+        }
       // background-color: red;
       input{
-        width: 100%;
+        width: 80%;
         padding:0rem;
         margin: 0;
-        text-align:right;
-        border: 1px solid #dedede;
-        border-radius:5/20rem;
       }
 
     }
      >div:nth-of-type(3){
-      width: 30%;
+      width:180/46.875rem;
+
     }
     button {
         display: block;
@@ -902,6 +886,7 @@ button{
         height: 39/20rem;
         border: 0;
         background: #177bdd;
+        padding: 0!important;
         color: white;
     }
 
@@ -990,7 +975,7 @@ button{
 
 }
 .qin{
-  margin-left:-8px;
+  /*margin-left:-8px;*/
 }
 
 .lajiton-active {
@@ -1000,7 +985,7 @@ button{
 .regulation{
   position: fixed;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background: rgba(7,17,27,0.8);
   z-index: 999;
   top: 0;
@@ -1008,8 +993,6 @@ button{
   font-size: 12/20rem;
   overflow-y: scroll;
   >div{
-    display:flex;
-    flex-direction: column;
     width: 100%;
     >div{
       padding-left: 15/20rem;
@@ -1025,8 +1008,6 @@ button{
     display: flex;
     justify-content: space-between;
     margin-top: 20/20rem;
-
-    padding-left: 0;
     h5{
       margin: 0;
     }
@@ -1041,12 +1022,16 @@ button{
       transform: translate(-29/20rem,-9/20rem);
     }
   }
-  .icon-guanbi{
+  .icon{
     position: absolute;
-    right: 0;
-    top: 0;
+    right: 4/20rem;
+    top: 0rem;
     font-size: 26/20rem;
   }
+}
+.game_main{
+  height: 568/20rem;
+  overflow: scroll;
 }
 
 </style>

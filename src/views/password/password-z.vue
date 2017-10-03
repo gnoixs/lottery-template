@@ -17,27 +17,36 @@
       <p>请为您的账号设置一个新的支付密码</p>
     </div>
     <div class="middle2" style="margin-top:0.8rem">
-      <input v-model="old_password" type="password" placeholder="请输入旧的支付密码" onkeyup="value=value.replace(/[^\d]/g,'')" minlength="4" maxlength="4"/>
+      <input v-model="old_password" type="password"  pattern="[0-9]*" placeholder="请输入旧的支付密码" onkeyup="value=value.replace(/[^\d]/g,'')" minlength="4" maxlength="4"/>
     </div>
     <div class="middle2" style="margin-top:0.8rem">
-      <input type="password" v-model="new_password"  placeholder="请输入新的支付密码，四位的纯数字" onkeyup="value=value.replace(/[^\d]/g,'')" minlength="4" maxlength="4"/>
+      <input type="password" v-model="new_password"  pattern="[0-9]*"  placeholder="请输入新的支付密码，四位的纯数字" onkeyup="value=value.replace(/[^\d]/g,'')" minlength="4" maxlength="4"/>
     </div>
     <div class="middle2" >
-      <input type="password" style="border-top:none" v-model="new_password_again" placeholder="请再次确认新的支付密码，四位的纯数字" onkeyup="value=value.replace(/[^\d]/g,'')" minlength="4" maxlength="4"/>
+      <input type="password" style="border-top:none"  pattern="[0-9]*" v-model="new_password_again" placeholder="请再次确认新的支付密码，四位的纯数字" onkeyup="value=value.replace(/[^\d]/g,'')" minlength="4" maxlength="4"/>
     </div>
     <div class="btn1">
-      <button @click="submit">确认修改</button>
+      <button @click="submit" class="color1">确认修改</button>
     </div>
-    <div v-show="isHao">
-      <div class="modal_box_feedback_login">
-        <div>{{title}}</div>
+     <div v-show="isHao">
+      <div class="modal_box_feedback">
+         <div class="modal_div">
+        		<div class="modal_header color1">
+        			<span>通知</span>
+        			<i></i>
+        		</div>
+        		<div class="modal_foot">
+        			<div ref="rscenter"></div>
+        			<p>{{title}}</p>
+        		</div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
   import iHeader from '../../components/i-header'
-/*  import {getOid,getUrl} from '../../api'*/
+//  import {getOid,getUrl} from '../../api'
   export default {
     data() {
       return {
@@ -60,9 +69,15 @@
           this.$http.post(`${getUrl()}/user/info`,JSON.stringify(prams)).then(res => {
 
             if (res.data.msg == "4001") {
-              this.$router.push({
-                path: '/login'
-              }) // 跳转到登陆
+              	 sessionStorage.clear();
+				this.isHao = true;
+		      	this.title = "您的账户已失效，请重新登录";
+		        setTimeout(() => {
+		          	this.isHao = false;
+		          	this.$router.push({
+		            	path: '/login'
+		          	})
+		          },1000)
             }
             else if(res.data.msg == "3003"){
               this.title="缺失必填项"
@@ -175,6 +190,6 @@
     }
   }
   .return1{
-    
+
   }
 </style>

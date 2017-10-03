@@ -1,11 +1,10 @@
 <template>
-  <div class="all1">
-
+  <div class="all1" :style="{'top': isIosWebview ? 40/40+'rem': 0}">
     <div class="login_back color1">
       <a  @click="back_index" href="javascript:;">
-        <img src="../../../static/images/backing_out.png" alt="" />
+        <img src="../../../static/images/backing_out.png" alt=""/>
       </a>
-      <span>用户登录</span>
+      <span test="test">用户登录</span>
     </div>
 
 
@@ -22,26 +21,45 @@
           <input type="password" v-model="passWord" placeholder="登陆密码" ref="passwordInput"/>
           <i @click="changePasswordType" :class="`${ispassWord?'openEyes':'closeEyes'}`"></i>
         </div>
-
+				
+          <p style="margin-top: 0.5rem;">
+          	
+          	<label style="color:#146cdc;"><input type="checkbox"  class="checkbox" v-model="rememberpassword"/><i class="checkboxinput"></i>记住密码</label>
+          	<a @click='isShiwan' style="float: right;color:#146cdc;margin-right:0.5rem;">免费试玩</a>
+          </p>
+        
         <!--<input type="text" placeholder="验证码"/>-->
         <!--<input type="text" style="background:#9EABBC"/>-->
         <!--<a href="">-->
           <!--<p class="ty">忘记密码?</p>-->
         <!--</a>-->
         <div id="btn">
-          <a @click="subMit">
+          <a @click.prevent="subMit">
             <button class="color1" style="color:#fff">确认登录</button>
           </a>
-          <a @click="gotoAddress('/regist')">
-            <button style="color:#3178CA;background:#CACDD6;">立即注册</button>
+          <a @click.prevent="gotoAddress('/regist')">
+            <button class="gdcolor" style="color:#fff;background:#459df7;">立即注册</button>
           </a>
         </div>
+          <!--<div style="margin-top: 0.5rem">
+       		 <a  @click='isShiwan'style="float: left;color:#146cdc;">找回密码</a>
+	         <a @click='isShiwan' style="float: right;color:#146cdc;margin-right:0.5rem;">免费试玩</a>
+        </div>-->
       </div>
     </div>
 
-    <div v-show="isHao">
-      <div class="modal_box_feedback_login">
-        <div>{{title}}</div>
+   <div v-show="isHao">
+      <div class="modal_box_feedback">
+         <div class="modal_div">
+        		<div class="modal_header color1">
+        			<span>通知</span>
+        			<i></i>
+        		</div>
+        		<div class="modal_foot">
+        			<div ref="rscenter"></div>
+        			<p>{{title}}</p>
+        		</div>
+        </div>
       </div>
     </div>
 
@@ -53,20 +71,30 @@
   import base64 from 'js-base64'
   //  md5
 //  import md5 from 'blueimp-md5'
-  //import { getUrl} from '../../api'
+//  import { getUrl} from '../../api'
   export default {
     data() {
       return {
+        is_gd_ali: is_gd_ali(),
+        isIosWebview: isIosWebview,
         ispassWord:false,
         userName: '',
         passWord: '',
         isHao: false,
         title:"",
+        logoxian:false,
+        isOpen:false,
+        rememberpassword:localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).rember : false,
         from:{
           input1:false,
           input2:false
         },
-        test1:"http://www.baidu.com"
+        test1:"http://www.baidu.com",
+        user:{
+        	userName:'',
+        	passWord:'',
+        	rember:''
+        }
       }
     },
     methods: {
@@ -103,6 +131,7 @@
           params.username = this.userName;
           params.password = this.passWord;
           this.$http.post(`${getUrl()}/user/signin`,JSON.stringify(params)).then(res => {
+          	console.log(res.data)
             if(res.data.msg==2001){
               this.title="密码错误"
               this.isHao=true
@@ -125,15 +154,27 @@
               },600);
             }
             else if(res.data.oid){
+            		if(this.rememberpassword){
+            			this.user.userName=" "+this.userName
+            			this.user.passWord=" "+this.passWord
+            			this.user.rember=this.rememberpassword
+            			localStorage.setItem('user',JSON.stringify(this.user))
+            			
+            		}else{
+									localStorage.removeItem('user')
+            		}
+            	  this.isHao=true
+            	if(this.is_gd_ali){
+			      			this.$refs.rscenter.style.backgroundImage="url('../../../static/images/suuccen.png')"
+				      	}else{
+				      		this.$refs.rscenter.style.backgroundImage="url('../../../static/images/gdsuuccen.png')"
+				      	}
               this.title="登陆成功"
-              this.isHao=true
-
               sessionStorage.setItem('im_token', JSON.stringify(res.data.oid))
               sessionStorage.setItem('im_money', JSON.stringify(res.data.money))
               sessionStorage.setItem('im_username',res.data.username)
               sessionStorage.setItem('im_realname',res.data.realname)
               sessionStorage.setItem('im_email',res.data.qqskype)
-
               setTimeout(()=>{
                 this.isHao=false
                 this.$router.push('/index')
@@ -149,18 +190,77 @@
           },600);
         }
       },
+      isShiwan() {
+					this.logoxian=true
+          this.isOpen=false
+        	this.$http.post(`${getUrl()}/user/signdemo`).then(res => {
+        		
+          if (res.data.oid) {
+          	if(this.is_gd_ali){
+          			this.$refs.rscenter.style.backgroundImage="url('../../../static/images/suuccen.png')"
+          	}else{
+          			this.$refs.rscenter.style.backgroundImage="url('../../../static/images/gdsuuccen.png')"
+          	}
+          	
+            this.title = "试玩账号登陆成功"
+          
+            this.isHao = true
+            setTimeout(()=>{
+              this.isHao=false
+            },1200);
+            sessionStorage.setItem('im_token', JSON.stringify(res.data.oid))
+            sessionStorage.setItem('im_money', JSON.stringify(res.data.money))
+            sessionStorage.setItem('im_username', res.data.username)
+            sessionStorage.setItem('im_realname', res.data.realname)
+            setTimeout(() => {
+              if (sessionStorage.getItem("im_username")) {
+                this.title_control = true;
+                this.username = sessionStorage.getItem("im_username")
+              } else {
+                this.title_control = false;
+              }
+            }, 0);
+             setTimeout(()=>{
+                this.isHao=false
+                this.$router.push('/index')
+              },600);
+          } else {
+            this.title = "登录失败"
+            this.isHao = true
+            setTimeout(() => {
+              this.isHao = false
+            }, 600);
+          }
+        })
+      },
       back_index(){
         this.$router.push("/index")
       }
     }
     ,
     beforeCreate(){
-      sessionStorage.removeItem("im_token");
+    	
+
+      sessionStorage.clear();
     },
+    created(){
+    	
+      if(localStorage.getItem('user')){
+      	 this.userName = JSON.parse(localStorage.getItem('user')).userName.trim() 
+      	 this.passWord = JSON.parse(localStorage.getItem('user')).passWord.trim()
+     		 this.rememberpassword=JSON.parse(localStorage.getItem('user')).rember 
+      }else{
+      	
+      }
+    },
+//   rememberpassword(){
+//  	console.log(1111)
+//  },
     watch: {
-  '$route' (to, from) {
-  }
-  }
+		  '$route' (to, from) {
+		  }
+		},
+		
   }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
@@ -258,7 +358,7 @@
     // text-align:center;
     span{
       display:inline-block;
-      width: 1.2rem;
+      width: 1.3rem;
       height: 1.3rem;
       background:red;
       vertical-align:middle;
@@ -327,7 +427,7 @@
     outline:none;
   }
   #btn{
-    margin:1rem auto;
+   /* margin:1rem auto;*/
     text-align:center;
   }
   #btn a{
@@ -346,26 +446,16 @@
     color:#B6C3DA;
     background:#3369C6;
   }
-  .modal_box_feedback_login {
-    z-index: 99999;
-    position: fixed;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    display:-webkit-flex;
-    justify-content: center;
-    align-items: center;
-    > div {
-      background: rgba(0,0,0,0.5);
-      color: white;
-      padding: 10px 40px;
-      border-radius: 4px;
-    }
-  }
-  .login_back{
 
-    padding: 10/20rem 16/20rem;
-    margin-bottom: -16/20rem;
+  .login_back{
+    padding: 0.4rem 0.8rem;
+    margin-bottom: -0.8rem;
+    height: 1.95rem;
+    box-sizing: border-box;
+    line-height: 0.95rem;
+    width: 100%;
+    position: fixed;
+    z-index: 10000000000;
     a{
 
       display: inline-block;
@@ -385,4 +475,20 @@
       color: #fff;
     }
   }
+.checkbox{
+ position: absolute; top: -9999px;
+}
+ .checkboxinput{
+    display: inline-block;
+    width: 17px; height: 17px;
+    margin-right: 5px;
+    background: url(../../../static/images/radio_simulation.png) no-repeat;
+    background-size: 100% 100%;
+    vertical-align: middle;
+}
+input:checked+i{
+    background: url(../../../static/images/radio_simulation_check1.png) no-repeat;
+    background-size: 100% 100%;
+}
+
 </style>

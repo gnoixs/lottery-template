@@ -1,5 +1,6 @@
 <template>
-  <div class="all1">
+  <div class="all1" :style="{'top': isIosWebview ? 40/40+'rem': 0}">
+    <div class="topHeader" :style="{'background': is_gd_ali ? '#e60d39': '#146cdc'}" v-if="isIosWebview"></div>
    <div class="login_back color1">
       <a  @click="goback" href="javascript:;">
         <img src="../../../static/images/backing_out.png" alt="" />
@@ -13,28 +14,27 @@
         <div class="logo logoazhu"></div>
       </div>
     <div class="form">
-
       <div>
         <span class="zhanhao"></span>
-        <input @blur="verification_1(userName)" type="text" v-model="userName" placeholder="用户账号(6-15英文数字组合)"/>
+        <input @blur="verification_1(userName)" type="text" v-model="userName" placeholder="用户账号(6-15英文数字)"/>
         <img v-show="from.input1" src="../../../static/images/warning _b.png"/>
       </div>
       <div>
         <span class="loc"></span>
-        <input ref="passwordInput" @blur="verification_2(passWord)" type="password" placeholder="登录密码(6-15英文数字组合)" v-model="passWord"/><i @click="changePasswordType_a" :class="`${ispassword_a?'openEyes':'closeEyes'}`"></i>
+        <input ref="passwordInput" @blur="verification_2(passWord)" type="password" placeholder="登录密码(6-15英文数字)" v-model="passWord"/><i @click="changePasswordType_a" :class="`${ispassword_a?'openEyes':'closeEyes'}`"></i>
         <img v-show="from.input2" src="../../../static/images/warning _b.png"/>
       </div>
       <div>
         <span class="loc"></span>
-        <input ref="passwordInput_again" @blur="verification_3(passWordAgain)" type="password" placeholder="确认密码(6-15英文数字组合)" v-model="passWordAgain"/><i @click="changePasswordType_b"  :class="`${ispassword_b?'openEyes':'closeEyes'}`" ></i>
+        <input ref="passwordInput_again" @blur="verification_3(passWordAgain)" type="password" placeholder="确认密码(6-15英文数字)" v-model="passWordAgain"/><i @click="changePasswordType_b"  :class="`${ispassword_b?'openEyes':'closeEyes'}`" ></i>
         <img v-show="from.input3" src="../../../static/images/warning _b.png"/>
       </div>
-
       <div>
         <span class="zhanhao"></span>
         <input @blur="verification_4(realName)" type="text" placeholder="您的姓名(与提款的银行户名一致)" v-model="realName"/>
         <img v-show="from.input4" src="../../../static/images/warning _b.png"/>
       </div>
+
       <div class="select_a">
         <span class="loc"></span>
         <div class="input3">
@@ -72,6 +72,7 @@
         <div>提现密码</div>
       </div>
 
+
       <!--<div>-->
         <!--<span class="recommend"></span>-->
         <!--<input type="text" placeholder="便于日后找回密码" v-model="email"/>-->
@@ -80,17 +81,31 @@
       <div class="btn5">
         <button class="color1"  @click="subMit">立即注册</button>
       </div>
+
+			
     </div>
       <div class="back_login"><span>已有账号?</span><a class="color_money" @click='gotoAddress("/login")'>马上登陆</a></div>
     </div>
 
-  <div v-show="isHao">
-    <div class="modal_box_feedback_regist">
-      <div>{{title}}</div>
+   <div v-show="isHao">
+      <div class="modal_box_feedback">
+         <div class="modal_div">
+        		<div class="modal_header color1">
+        			<span>通知</span>
+        			<i></i>
+        		</div>
+        		<div class="modal_foot">
+        			<div ref="rscenter"></div>
+        			<p>{{title}}</p>
+        		</div>
+        </div>
+      </div>
     </div>
-  </div>
+
 	</div>
 </template>
+
+
 
 <script>
 // base 64
@@ -101,6 +116,8 @@ import md5 from 'blueimp-md5'
 export default {
   data() {
     return {
+    	is_gd_ali: is_gd_ali(),
+      isIosWebview: isIosWebview,
       paypasswd:'',
       realName:"",
       passWordAgain:'',
@@ -134,7 +151,6 @@ export default {
       ispassword_b:false,
       title:''
     }
-
   },
 
   methods: {
@@ -181,7 +197,8 @@ export default {
             },1200);
           }
           else if(res.data.msg==2003){
-            this.title="注册失败,返回码2003"
+
+            this.title="注册失败"
             this.isHao=true
             this.paypasswd = ''
             setTimeout(()=>{
@@ -189,18 +206,61 @@ export default {
             },1200);
           }
           else if(res.data.msg==2006){
+          	console.log(res.data)
             this.title="注册成功"
             this.isHao=true
             this.paypasswd = ''
-            setTimeout(()=>{
-              this.isHao=false
-              this.$router.push({
-                path: '/login'
-              }) // 跳转到登陆
-            },1200);
+
+					this.$http.post(`${getUrl()}/user/signin`,JSON.stringify(params)).then(res => {
+            if(res.data.msg==2001){
+              this.title="密码错误"
+              this.isHao=true
+              setTimeout(()=>{
+                this.isHao=false
+              },600);
+            }
+            else if(res.data.msg==2002){
+              this.title="用户不存在"
+              this.isHao=true
+              setTimeout(()=>{
+                this.isHao=false
+              },600);
+            }
+            else if(res.data.msg==2005){
+              this.title="账户被冻结或停用"
+              this.isHao=true
+              setTimeout(()=>{
+                this.isHao=false
+              },600);
+            }
+            else if(res.data.oid){
+              this.title="注册成功"
+              this.isHao=true
+            	if(this.is_gd_ali){
+          			this.$refs.rscenter.style.backgroundImage="url('../../../static/images/suuccen.png')"
+	          	}else{
+	          			this.$refs.rscenter.style.backgroundImage="url('../../../static/images/gdsuuccen.png')"
+	          	}
+              sessionStorage.setItem('im_token', JSON.stringify(res.data.oid))
+              sessionStorage.setItem('im_money', JSON.stringify(res.data.money))
+              sessionStorage.setItem('im_username',res.data.username)
+              sessionStorage.setItem('im_realname',res.data.realname)
+              sessionStorage.setItem('im_email',res.data.qqskype)
+              setTimeout(()=>{
+                this.isHao=false
+                this.$router.push('/index')
+              },600);
+            }
+          })
+//          setTimeout(()=>{
+//            this.isHao=false
+//            this.$router.push({
+//              path: '/index'
+//            }) // 跳转到登陆
+//          },1200);
           }
           else if(res.data.msg==3003){
-            this.title="注册失败,返回码3003"
+            this.title="注册失败"
             this.isHao=true
             this.paypasswd = ''
             setTimeout(()=>{
@@ -209,6 +269,14 @@ export default {
           }
           else if(res.data.msg==2008){
             this.title="用户名:字母或者数字组合，必须以字母开头，6~15位"
+            this.isHao=true
+            this.paypasswd = ''
+            setTimeout(()=>{
+              this.isHao=false
+            },1200);
+          }
+          else if(res.data.msg==2011){
+            this.title="该名字已经被注册过了"
             this.isHao=true
             this.paypasswd = ''
             setTimeout(()=>{
@@ -235,7 +303,7 @@ export default {
             },1200);
           }
           else if (this.from.input1) {
-            this.title="用户账号已存在或不符合规范,只能输入字母或数字,字符长度为5至14位"
+            this.title="用户账号已存在或不符合规范,只能输入字母或数字,字符长度为6至15位"
             this.isHao=true
             this.paypasswd = ''
             setTimeout(()=>{
@@ -243,7 +311,7 @@ export default {
             },1800);
           }
           else if (this.from.input2) {
-            this.title="登录密码,必须混合字母和数字,字符长度为5至14位"
+            this.title="登录密码,必须混合字母和数字,字符长度为6至15位"
             this.isHao=true
             this.paypasswd = ''
             setTimeout(()=>{
@@ -280,8 +348,8 @@ export default {
     },
 
     verification_1(userName){
-      //字母、数字组成，字母开头，4-16位。
-      if (!(/^[a-zA-Z0-9]{5,14}$/.test(userName))) {
+      //字母、数字组成，字母开头，6-15位。
+      if (!(/^[a-zA-Z0-9]{6,115}$/.test(userName))) {
         this.from.input1=true
       }
       else {
@@ -302,8 +370,8 @@ export default {
       }
     },
     verification_2(passWord){
-      //字母、数字、下划线组成，字母开头，4-16位。
-      if (!(/^[a-zA-Z0-9]{5,14}$/.test(passWord))) {
+      //字母、数字、下划线组成，字母开头，6-15位。
+      if (!(/^[a-zA-Z0-9]{6,15}$/.test(passWord))) {
         this.from.input2=true
       }
       else {
@@ -320,7 +388,7 @@ export default {
     },
     verification_4(realName){
       //两个以上的中文字
-      if (!(/^[\u4E00-\u9FA5]{2,}$/.test(realName))) {
+      if (!(/^[\u4E00-\u9FA5·]{2,}$/.test(realName))) {
         this.from.input4=true
       }
       else {
@@ -412,29 +480,30 @@ button{
     margin-left: 5/20rem;
     outline: 0;
 	}
+
 .form span{
 		color:#E0E2E7;
 		font-size:0.6rem;
 	}
 	.input3{
-		display:flex;
-    width: 170/20rem;
+    width: 160/20rem;
     margin-left: 4/25rem;
+    display: inline-block;
 	}
 
   .select_a{
-    display:flex;
-    align-items: center;
     height: 48/20rem;
     >span:nth-of-type(1){
       width: 20/20rem;
       margin-right: 10/20rem;
     }
     >div:nth-last-of-type(1){
+      display: inline-block;
       width: 62/20rem;
       font-size: 10/20rem;
       padding-top: 6/20rem;
       height: 30/20rem;
+      line-height: 20/20rem;
       color: white;
       background-image: url(../../../static/images/cata1.png);
       background-size: 100% 100%;
@@ -443,19 +512,18 @@ button{
     }
   }
 	.input3 select{
-		width:36/20rem;
+		width:32/20rem;
 		height:1.5rem;
 		text-align:center;
 		outline:none;
 		font-size:20px;
 		appearance: none;
 		-webkit-appearance: none;
-		margin-left:1px;
 		border-radius:5px;
     background: #eeeeee;
     border: 1px solid #e3e3e3;
-    padding-left: 8/20rem;
-    margin-right: 4/20rem;
+    padding-left: 4/20rem;
+    margin-right: 0/20rem;
 	}
 	.w{
 		color:#fff;
@@ -479,18 +547,23 @@ button{
   .form{
     margin-top: 38/20rem;
     span{
-      display:inline-block;
+
       width: 21/20rem;
       height: 21/20rem;
       background:red;
-      vertical-align:middle;
     }
     >div{
           border-bottom: 1px solid #cccccc;
          height: 40/20rem;
+         line-height: 40/20rem;
+          >span:nth-of-type(1){
+            float: left;
+            margin-top: 10/20rem;
+          }
+
          >input{
           padding:0;
-          width: 12rem;
+          width: 220/20rem;
           height:1.5rem;
           background-color: #fff;
           padding-left:13/20rem;
@@ -510,9 +583,7 @@ button{
        }
 
     >div{
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
+
       position: relative;
       >img{
         position: absolute;
@@ -521,26 +592,12 @@ button{
       }
     }
   }
-  .modal_box_feedback_regist {
-    z-index: 99999;
-    position: fixed;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    > div {
-      background: rgba(0,0,0,0.5);
-      color: white;
-      padding: 10px 40px;
-      border-radius: 4px;
-    }
-  }
-  .login_back{
-
-    padding: 5.5/20rem 16/20rem;
-    margin-bottom: -16/20rem;
+ .login_back{
+   padding: 0.275rem 0.8rem;
+   margin-bottom: -0.8rem;
+   width: 100%;
+   height: 1.95rem;
+   position: fixed;
     a{
 
       display: inline-block;

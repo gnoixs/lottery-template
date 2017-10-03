@@ -193,7 +193,7 @@ html {
     /* 1 */
     -ms-text-size-adjust: 100%;
     /* 2 */
-    -webkit-text-size-adjust: 100%;
+    -webkit-text-size-adjust: none;
     /* 2 */
 }
 
@@ -402,10 +402,227 @@ sup {
     top: -0.5em;
 }
 
+.pk{	
+	
+	    margin-right: 0.07rem!important;
+}
+.cl_1{
+/*  background: #fff600!important;*/
+  background: url(../../../static/images/cl_1.png) no-repeat!important;
+  background-size: 100% 100%!important;
+  
+}
+.cl_2{
+   background: url(../../../static/images/cl_2.png) no-repeat!important;
+  background-size: 100% 100%!important;
+}
+.cl_3{
+  background: url(../../../static/images/cl_3.png) no-repeat!important;
+  background-size: 100% 100%!important;
+}
+.cl_4{
+   background: url(../../../static/images/cl_4.png) no-repeat!important;
+  background-size: 100% 100%!important;
+}
+.cl_5{
+   background: url(../../../static/images/cl_5.png) no-repeat!important;
+  background-size: 100% 100%!important;
+}
+.cl_6{
+   background: url(../../../static/images/cl_6.png) no-repeat!important;
+  background-size: 100% 100%!important;
+}
+.cl_7{
+   background: url(../../../static/images/cl_7.png) no-repeat!important;
+  background-size: 100% 100%!important;
+}
+.cl_8{
+  background: url(../../../static/images/cl_8.png) no-repeat!important;
+  background-size: 100% 100%!important;
+}
+.cl_9{
+   background: url(../../../static/images/cl_9.png) no-repeat!important;
+  background-size: 100% 100%!important;
+}
+.cl_10{
+   background: url(../../../static/images/cl_10.png) no-repeat!important;
+  background-size: 100% 100%!important;
+}
+.clg_19{
+	width: 1rem!important;
+    height: 1rem!important;
+    line-height: 1rem!important;
+  background: #df3836!important;
+}
+.clg_20{
+	width: 1rem!important;
+    height: 1rem!important;
+    line-height: 1rem!important;
+  background: #df3836!important;
+}
+.pcddkj,.clg_01,.clg_02,.clg_03,.clg_04,.clg_05,.clg_06,.clg_07,.clg_08,.clg_09,.clg_10,.clg_11,.clg_12,.clg_13,.clg_14,.clg_15,.clg_16,.clg_17,.clg_18{
+ /* background: #146cdc!important;*/
+	background: url(../../../static/images/gameicon.png) no-repeat!important;
+  background-size: 100% 100%!important;
+     width: 1rem!important;
+    height: 1rem!important;
+    line-height: 1rem!important;
+}
 
+.xync{
+	width: 1rem!important;
+	height: 1rem!important;
+} 
+.xync_01{
+	 background: url(../../../static/images/xync_1.png) no-repeat!important;
+ 	 background-size: 100% 100%!important;
+}
+.xync_02{
+	 background: url(../../../static/images/xync_2.png) no-repeat!important;
+ 	 background-size: 100% 100%!important;
+}
+.xync_03{
+	 background: url(../../../static/images/xync_3.png) no-repeat!important;
+ 	 background-size: 100% 100%!important;
+}
+.xync_04{
+	 background: url(../../../static/images/xync_5.png) no-repeat!important;
+ 	 background-size: 100% 100%!important;
+}
+.xync_05{
+	 background: url(../../../static/images/xync_5.png) no-repeat!important;
+ 	 background-size: 100% 100%!important;
+}
+.xync_06{
+	 background: url(../../../static/images/xync_6.png) no-repeat!important;
+ 	 background-size: 100% 100%!important;
+}
+.xync_07{
+	 background: url(../../../static/images/xync_7.png) no-repeat!important;
+ 	 background-size: 100% 100%!important;
+}.xync_08{
+	 background: url(../../../static/images/xync_8.png) no-repeat!important;
+ 	 background-size: 100% 100%!important;
+}
+.xync_09{
+	 background: url(../../../static/images/xync_9.png) no-repeat!important;
+ 	 background-size: 100% 100%!important;
+}
+.xync_10{
+	 background: url(../../../static/images/xync_10.png) no-repeat!important;
+ 	 background-size: 100% 100%!important;
+}
+.xync_11{
+	 background: url(../../../static/images/xync_11.png) no-repeat!important;
+ 	 background-size: 100% 100%!important;
+}
+.xync_12{
+	 background: url(../../../static/images/xync_12.png) no-repeat!important;
+ 	 background-size: 100% 100%!important;
+}
+.xync_13{
+	 background: url(../../../static/images/xync_13.png) no-repeat!important;
+ 	 background-size: 100% 100%!important;
+}
+.xync_14{
+	 background: url(../../../static/images/xync_14.png) no-repeat!important;
+ 	 background-size: 100% 100%!important;
+}
+.xync_15{
+	 background: url(../../../static/images/xync_15.png) no-repeat!important;
+ 	 background-size: 100% 100%!important;
+}
+.xync_16{
+	 background: url(../../../static/images/xync_16.png) no-repeat!important;
+ 	 background-size: 100% 100%!important;
+}
+.xync_17{
+	 background: url(../../../static/images/xync_17.png) no-repeat!important;
+ 	 background-size: 100% 100%!important;
+}
+.xync_18{
+	 background: url(../../../static/images/xync_18.png) no-repeat!important;
+ 	 background-size: 100% 100%!important;
+}
+.xync_19{
+	 background: url(../../../static/images/xync_19.png) no-repeat!important;
+ 	 background-size: 100% 100%!important;
+}
+.xync_20{
+	 background: url(../../../static/images/xync_20.png) no-repeat!important;
+ 	 background-size: 100% 100%!important;
+}
 /* Embedded content
    ========================================================================== */
-
+   .bgxg_1,
+   .bgxg_2,
+   .bgxg_7,
+   .bgxg_8,
+   .bgxg_12,
+   .bgxg_13,
+   .bgxg_18,
+   .bgxg_19,
+   .bgxg_23,
+   .bgxg_24,
+   .bgxg_29,
+   .bgxg_30,
+   .bgxg_34,
+   .bgxg_35,
+   .bgxg_40,
+   .bgxg_45,
+   .bgxg_46{
+        background: url(../../../static/images/redbo.png) no-repeat!important;
+ 	 background-size: 100% 100%!important;
+ 	 width: 1rem!important;
+	height: 1rem!important;
+	line-height: 1rem!important;
+   }
+   .bgxg_3,
+   .bgxg_4,
+   .bgxg_9,
+   .bgxg_10,
+   .bgxg_14,
+   .bgxg_15,
+   .bgxg_20,
+   .bgxg_25,
+   .bgxg_26,
+   .bgxg_31,
+   .bgxg_36,
+   .bgxg_37,
+   .bgxg_41,
+   .bgxg_42,
+   .bgxg_47,
+   .bgxg_48{
+        background: url(../../../static/images/bluebo.png) no-repeat!important;
+ 	 	background-size: 100% 100%!important;
+ 	 	width: 1rem!important;
+		height: 1rem!important;
+		line-height: 1rem!important;
+   
+   }
+   .bgxg_5,
+   .bgxg_6,
+   .bgxg_11,
+   .bgxg_16,
+   .bgxg_17,
+   .bgxg_21,
+   .bgxg_22,
+   .bgxg_27,
+   .bgxg_28,
+   .bgxg_32,
+   .bgxg_33,
+   .bgxg_38,
+   .bgxg_39,
+   .bgxg_43,
+   .bgxg_44,
+   .bgxg_49{
+       background: url(../../../static/images/greenbo.png) no-repeat!important;
+ 	 background-size: 100% 100%!important;
+ 	 width: 1rem!important;
+	height: 1rem!important;
+	line-height: 1rem!important;
+   
+   }
 
 /**
  * Add the correct display in IE 9-.
@@ -711,3 +928,15 @@ template {
 [hidden] {
     display: none;
 }
+
+/** ios 顶部占用*/
+.topHeader{
+  width: 100%;
+  height: 1rem;
+  position: fixed;
+  top: 0;
+  z-index: 100;
+}
+
+
+

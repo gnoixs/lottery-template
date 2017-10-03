@@ -3,17 +3,20 @@
   <div class="header_order">
     <i-header title="资金管理"></i-header>
   </div>
-  <div class="bank" @click='juhe'>
-    <img src="../../../static/images/bank.png" style="width:1rem;height:1rem" alt=""/>
-    <p>银行卡管理</p>
+  <div class="bank">
+	    	
+    <!--<img src="../../../static/images/bank.png" style="width:1rem;height:1rem" alt=""/>
+    <p>银行卡管理</p>-->
+    <div><span>用户:</span><i>{{gameUsername}}</i></div>
+    <div><span>余额:</span><i>￥{{gameUsermoney}}</i></div>
   </div>
-  <div class="js" v-show="check&&isBank">
+  <!--<div class="js" v-show="check&&isBank">
     <p style="margin-left:0">{{resDate.bank_name}}</p>
     <p style="margin-left:0;color:#999999">{{resDate.bank_code}}</p>
     <a>
     		<img src="../../../static/images/setting.png" alt="" @click.stop='tiaozhuan' style="width:1rem;height:1rem" />
     	</a>
-  </div>
+  </div>-->
   <div v-if="check&&!isBank" class="ban" style="text-align:center;" @click='tiaozhuan'>
     <a>
     		<img src="../../../static/images/ch.png" alt="" />
@@ -23,37 +26,60 @@
   <!--订单状态  组件-->
   <div>
     <mu-tabs :value="activeTab" @change="handleTabChange">
-      <mu-tab  value="all" title="存款 " />
-      <mu-tab  value="obligation" title="取款" />
-      <mu-tab  value="paid" title="存取款记录" />
+      <mu-tab  value="all" title="充值" />
+      <mu-tab  value="obligation" title="提现" />
+      <mu-tab  value="paid" title="交易记录" />
     </mu-tabs>
-
     <div class="payTab" v-if="activeTab ==='all'">
+      <div class="order_title">
+        在线支付 Online Payment
+      </div>
       <div class="ban" @click="gotoPayAddress(onlinePay)" v-if="BankisCunzai.length>0">
         <img src="../../../static/images/livepay.png" alt="" />
-        <p>在线支付</p>
+        <p>网银在线充值</p>
       </div>
       <div class="ban" @click="gotoPayAddress(aliPay)" v-if="AliisCunzai.length>0">
         <img src="../../../static/images/bao.png" alt="" />
-        <p>支付宝支付</p>
-      </div>
-      <div class="ban" @click="gotoPayAddress(CftPay)" v-if="CftisCunzai.length>0">
-        <img src="../../../static/images/cft.png" alt="" />
-        <p>财付通</p>
+        <p>支付宝在线充值</p>
       </div>
       <div class="ban" @click="gotoPayAddress(wechatPay)" v-if="WechatisCunzai.length>0">
         <img src="../../../static/images/weixin.png" alt="" />
-        <p>微信支付</p>
+        <p>微信在线充值</p>
       </div>
-      <div class="ban" @click="gotoPayAddress(handPay)">
+      <div class="ban" @click="gotoPayAddress(CftPay)" v-if="CftisCunzai.length>0">
+        <img src="../../../static/images/cft.png" alt="" />
+        <p>财付通在线充值</p>
+      </div>
+      <div class="order_title">
+        线下支付 Offline Payment
+      </div>
+      <!--<div class="ban" @click="gotoPayAddress(handPay)">
         <img src="../../../static/images/hands.png" alt="" />
-        <p>线下充值</p>
+        <p>公司入款</p>
+  
+      </div>-->
+        <div class="ban"  @click="gotoPayAddress(handPay,'bankpay_array')" v-if="lineBankisCunzai.length>0">
+        <img src="../../../static/images/livepay.png" alt="" />
+        <p>银行转账</p>
       </div>
+      <div class="ban"  @click="gotoPayAddress(handPay,'alipay_array')" v-if=" lineAliisCunzai.length>0">
+        <img src="../../../static/images/bao.png" alt="" />
+        <p>支付宝转账</p>
+      </div>
+       <div class="ban"  @click="gotoPayAddress(handPayz,'wechat_array')" v-if="lineWechatisCunzai.length>0">
+        <img src="../../../static/images/weixin.png" alt="" />
+        <p>微信转账</p>
+      </div>
+      <div class="ban"  @click="gotoPayAddress(handPayz,'cft_array')" v-if="lineCftisCunzai.length>0">
+        <img src="../../../static/images/cft.png" alt="" />
+        <p>财付通转账</p>
+      </div>
+     
     </div>
 
     <div class="take_class" v-if="activeTab ==='obligation'">
       <div v-if="isBank" >
-        <div class="js">
+        <div class="js" @click='tiaozhuan'>
           <!-- <img src="../../../static/images/jsyh.png" style="width:1.5rem;float:left;position:relative;top:0.2rem;" alt="" /> -->
           <p>{{resDate.bank_name}}</p>
           <p>{{resDate.bank_code}}</p>
@@ -86,7 +112,6 @@
           </span>
       </div>
     </div>
-
 
     <div class="cun_qu_list" v-if="activeTab ==='paid'" ref="historyM">
       <div class="demo-infinite-container" style="border:none;">
@@ -130,12 +155,20 @@
 
     </div>
   </div>
-
-  <div v-show="isHao">
-    <div class="modal_box_feedback_regist">
-      <div>{{title}}</div>
+ <div v-show="isHao">
+      <div class="modal_box_feedback">
+         <div class="modal_div">
+        		<div class="modal_header color1">
+        			<span>通知</span>
+        			<i></i>
+        		</div>
+        		<div class="modal_foot">
+        			<div ref="rscenter"></div>
+        			<p>{{title}}</p>
+        		</div>	
+        </div>
+      </div>
     </div>
-  </div>
 
   <!--遮罩层结束-->
 </div>
@@ -143,9 +176,9 @@
 
 <script>
 import iHeader from '../../components/j-header'
-/*import {
-  getOid,getUrl
-} from '../../api'*/
+//import {
+//  getOid,getUrl
+//} from '../../api'
 export default {
   components: {
     iHeader
@@ -153,11 +186,23 @@ export default {
   data() {
 
     return {
+    	is_gd_ali: is_gd_ali(),
+    	gameUsername:0,
+    	gameUsermoney:0,
+      isChOrRu:0,
+      bankmin:0,
+      bankmin2:100,
+      bankmax2:0,
+      bankmax:0,
       singeMoney:{},
       AliisCunzai:0,
       WechatisCunzai:0,
       BankisCunzai:0,
       CftisCunzai:0,
+      lineAliisCunzai:0,
+      lineWechatisCunzai:0,
+      lineBankisCunzai:0,
+      lineCftisCunzai:0,
       isShowMoney:0,
       list:[],
       page:1,
@@ -195,15 +240,20 @@ export default {
     let params = {};
     let userOid = getOid();
     params.oid = userOid;
-
     this.$http.post(`${getUrl()}/getinfo/money`, JSON.stringify(params)).then(res => {
-
       if (res.data.msg == "4001") {
-        // let timeStamp = res.data.next.timestap;
-        this.$router.push({
-          path: '/login'
-        }) // 跳转到登陆
+       sessionStorage.clear();
+		this.isHao = true;
+      	this.title = "您的账户已失效，请重新登录";
+        setTimeout(() => {
+          	this.isHao = false;
+          	this.$router.push({
+            	path: '/login'
+          	})
+          },1000)
       } else {
+	      this.gameUsername =res.data.username;
+	    	this.gameUsermoney = res.data.money;
         this.resDate = res.data;
         if (this.resDate.bank_code) {
           this.isBank = true;
@@ -211,15 +261,23 @@ export default {
       }
 
     })
-
     this.$http.post(`${getUrl()}/user/payin`, JSON.stringify(params)).then(res => {
-
+    	console.log(res.data)
       if (res.data.msg == "4001") {
-        // let timeStamp = res.data.next.timestap;
-        this.$router.push({
-          path: '/login'
-        }) // 跳转到登陆
+	      sessionStorage.clear();
+		  this.isHao = true;
+	  	  this.title = "您的账户已失效，请重新登录";
+	      setTimeout(() => {
+	      	this.isHao = false;
+	      	this.$router.push({
+	        	path: '/login'
+	      	})
+	      },1000)
       } else {
+      	this.lineAliisCunzai =res.data.alipay_array;
+	      this.lineWechatisCunzai =res.data.wechat_array;
+	      this.lineBankisCunzai =res.data.bankpay_array;
+	      this.lineCftisCunzai =res.data.quickpay_array;
         this.resDateBank = res.data.online_bank;
         this.resDateAli = res.data.online_alipay;
         this.resDateWechat = res.data.online_wechat;
@@ -227,33 +285,40 @@ export default {
         this.AliisCunzai = res.data.online_alipay;
         this.CftisCunzai = res.data.online_cft;
         this.WechatisCunzai = res.data.online_wechat;
-
+        this.bankmin = Number(res.data.moneylimit.bankmin);
+        this.bankmax = Number(res.data.moneylimit.bankmax);
       }
 
     })
 
   },
     created(){
+      this.isChOrRu = this.$route.params.id.split(':')[1];
+      if (Number(this.isChOrRu)) {
+        this.handleTabChange("obligation")
+      }
     let param = {};
     let userOid = getOid();
     param.oid = userOid;
     param.page = this.page;
     param.number = this.number;
     this.$http.post(`${getUrl()}/getinfo/record`, JSON.stringify(param)).then(res => {
-
       if (res.data.msg == "4001") {
-        // let timeStamp = res.data.next.timestap;
-        this.$router.push({
-          path: '/login'
-        }) // 跳转到登陆
+         sessionStorage.clear();
+		this.isHao = true;
+      	this.title = "您的账户已失效，请重新登录";
+        setTimeout(() => {
+          	this.isHao = false;
+          	this.$router.push({
+            	path: '/login'
+          	})
+          },1000)
       } else {
         this.list=res.data.res;
         this.zongshu =  res.data.allnmb;
       }
-
     })
   },
-
   methods: {
 
     chongzhi(){
@@ -269,7 +334,6 @@ export default {
       this.isShowMoney = !this.isShowMoney;
     },
     getLocalTime(nS) {
-
      let time=new Date(parseInt(nS) * 1000)
      let year=time.getFullYear();
      let month=time.getMonth()+1;
@@ -277,7 +341,6 @@ export default {
      let time_split=time.toLocaleTimeString().split(":")
      let time_a=`${time_split[0]}:${time_split[1]}`
       return `${year}年${month}月${date}日${time_a}`
-
 },
     loadMore() {
       if (this.page*10<=this.zongshu) {
@@ -291,10 +354,15 @@ export default {
         this.$http.post(`${getUrl()}/getinfo/record`, JSON.stringify(param)).then(res => {
 
           if (res.data.msg == "4001") {
-            // let timeStamp = res.data.next.timestap;
-            this.$router.push({
-              path: '/login'
-            }) // 跳转到登陆
+             sessionStorage.clear();
+			this.isHao = true;
+	      	this.title = "您的账户已失效，请重新登录";
+	        setTimeout(() => {
+	          	this.isHao = false;
+	          	this.$router.push({
+	            	path: '/login'
+	          	})
+	          },1000)
           } else {
             for (let i = 0; i < res.data.res.length; i++) {
               this.list.push(res.data.res[i]);
@@ -306,15 +374,17 @@ export default {
         })
       }
       else{
-        console.log(333);
+       
          return
       }
 
 
     },
     submit2() {
-      if (this.payMoney<100) {
-          this.title = "取款金额不能少于100"
+//  	debugger
+      if (this.payMoney<this.bankmin2||this.payMoney>this.gameUsermoney) {
+ 
+        this.payMoney<this.bankmin2?this.title = `取款金额不能少于${this.bankmin2}`: this.title = `取款金额不能大于${this.gameUsermoney}`
           this.isHao = true
           setTimeout(() => {
             this.isHao = false
@@ -332,10 +402,15 @@ export default {
         let postKind = this.$http;
         this.$http.post(`${getUrl()}/user/online_get`, JSON.stringify(params)).then(res => {
           if (res.data.msg == "4001") {
-            // let timeStamp = res.data.next.timestap;
-            this.$router.push({
-              path: '/login'
-            }) // 跳转到登陆
+            sessionStorage.clear();
+			this.isHao = true;
+	      	this.title = "您的账户已失效，请重新登录";
+	        setTimeout(() => {
+	          	this.isHao = false;
+	          	this.$router.push({
+	            	path: '/login'
+	          	})
+	          },1000)
           } else {
             //xiaosi
             //  this.resDate = res.data;
@@ -362,6 +437,11 @@ export default {
               }, 1200);
             } else if (res.data.msg == 2006) {
               //xiaosi
+              	if(this.is_gd_ali){
+			      			this.$refs.rscenter.style.backgroundImage="url('../../../static/images/suuccen.png')"
+				      	}else{
+				      		this.$refs.rscenter.style.backgroundImage="url('../../../static/images/gdsuuccen.png')"
+				      	}
               this.title = "取款信息提交成功"
               this.isHao = true;
               this.paypassWd = "",
@@ -402,10 +482,10 @@ export default {
 
 
     },
-    juhe() {
-      // alert(this.check)
-      this.check = !this.check
-    },
+//  juhe() {
+//    // alert(this.check)
+//    this.check = !this.check
+//  },
     //       gotoAddress(k) {
     //       if (k = this.onlinePay&&this.resDate.length==0) {
     //       }
@@ -415,13 +495,24 @@ export default {
     //       }
     //
     //       },
-    gotoPayAddress(kind) {
+    gotoPayAddress(kind,zf) {
+    		//线下
+    		
         if(kind =="handPay"){
-          this.$router.push(kind)
-        }
-
-        else{ let i = `/pay:${kind}`;
-          console.log(i,111);
+        	let i = `/handPay:${zf}`;
+        	if(zf=="alipay_array"){
+        		if(this.lineAliisCunzai[0].bank_image_url){
+        				i = `/handPay:alipay_array`
+        		}else{
+        			i = `/handPay:bankpay_array`
+        		}
+        	}
+        	
+          this.$router.push({path:i})
+          
+          //
+        }else{ let i = `/pay:${kind}`;
+         
           this.$router.push({path:i})}
 
     },
@@ -442,10 +533,15 @@ export default {
         this.$http.post(`${getUrl()}/getinfo/record`, JSON.stringify(param)).then(res => {
 
           if (res.data.msg == "4001") {
-            // let timeStamp = res.data.next.timestap;
-            this.$router.push({
-              path: '/login'
-            }) // 跳转到登陆
+            sessionStorage.clear();
+			this.isHao = true;
+	      	this.title = "您的账户已失效，请重新登录";
+	        setTimeout(() => {
+	          	this.isHao = false;
+	          	this.$router.push({
+	            	path: '/login'
+	          	})
+	          },1000)
           } else {
             this.list=res.data.res;
             this.zongshu =  Number(res.data.page.allnmb);
@@ -540,7 +636,7 @@ export default {
     font-size: 0.64rem;
     position: relative;
     top: -0.2rem;
-    padding-left: 10/20rem;
+   /* padding-left: 10/20rem;*/
     color: #ACACAC;
 }
 ::-webkit-input-placeholder {
@@ -584,8 +680,23 @@ export default {
 .bank {
     position: relative;
     margin-bottom: 0.3rem;
+    >div{
+    	width: 40%;
+    	display: inline-block;
+    	>i{
+    		color: #196fde;
+    		margin-left: 0.2rem;
+    	}
+    }
+    >div:nth-child(1){
+    	text-align: left;
+    }
+    >div:nth-child(2){
+    	text-align: right;
+    	margin-left: 2rem;
+    }
 }
-.bank:after {
+/*.bank:after {
     content: '';
     width: 0.5rem;
     position: absolute;
@@ -595,7 +706,7 @@ export default {
 
     background: url("../../../static/images/28.png") no-repeat;
     background-size: 100% 100%;
-}
+}*/
 // .bank img {
 //     width: 1rem;
 //     height: 1rem;
@@ -713,22 +824,7 @@ span.mu-tab-link-highlight {
     }
 
 }
-.modal_box_feedback_regist {
-    z-index: 99999;
-    position: fixed;
-    top: 0;
-    height: 100vh;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    > div {
-        background: rgba(0,0,0,0.5);
-        color: white;
-        padding: 10px 40px;
-        border-radius: 4px;
-    }
-}
+
 .cun_qu_list{
   height: 370/20rem;
   overflow-y: scroll;
@@ -746,7 +842,10 @@ span.mu-tab-link-highlight {
   font-size: 18/20rem;
 }
 
-
+.order_title{
+  color: #8f8f8f;
+  padding: 10/20rem 0/20rem 10/20rem 20/20rem;
+}
 
 
 

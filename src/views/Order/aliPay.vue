@@ -10,15 +10,11 @@
     <div><img :src="pay_img_url"/></div>
     <div></div>
   </div>
-
-
-
-  <div class="aisle">
+  <!--<div class="aisle">
     <div v-for = "(j,i) in aliPayId" @click.stop= "payonline(j,i)" :class="`${(navIndex == i)?'active':''}`">
       <span>通道{{i+1}}</span>
     </div>
-
-  </div>
+  </div>-->
   <div class="seach" v-if="isShowBank">
     <span>请选择银行：</span>
     <div>
@@ -29,41 +25,45 @@
       </select>
     </div>
   </div>
-
-  <form ref="formPay" method="post" target="_blank" onsubmit="return false">
-    <div class="content">
-      <ul>
-        <li v-for='item in data' @click='dianji(item)'>{{item}}</li>
-      </ul>
-      <p>单笔下限<span class="color_money">100.00,</span>单笔上限<span class="color_money">1000000.00</span></p>
-
-      <label>
-        <div>金额:</div>
-        <input type="number" name="" placeholder="请输入充值金额" v-model="shu" onkeyup="this.value=this.value.replace(/\D/g,'')">
-      </label>
-
-    </div>
-
-  </form>
+  	<!--<iframe ref="kefu" src=""></iframe>-->
+	  <form ref="formPay" method="post" target="_blank" onsubmit="return false">
+	    <div class="content">
+	      <ul>
+	        <li v-for='item in data' @click='dianji(item)'>{{item}}</li>
+	      </ul>
+	      <p>单笔下限<span class="color_money">{{moneyMin}}.00</span>,单笔上限<span class="color_money">{{moneyMax}}.00</span></p>
+	      <label>
+	        <div>金额:</div>
+	        <input type="number" name=""  placeholder="请输入充值金额" v-model="shu" onkeyup="this.value=this.value.replace(/\D/g,'')">
+	      </label>
+	    </div>
+	  </form>
   <div class="submit_div_a">
-    <button class="color1" @click.stop="submitM" :disabled="!isBlue">确认充值</button>
+    <button class="color1" @click.prevent.stop="submitM" :disabled="!isBlue">确认充值</button>
     <!--<button class="color_money" @click.stop='chongzhi'>重置充值</button>-->
   </div>
-
-
-  <div v-show="isHao">
-    <div class="modal_box_feedback_regist">
-      <div>{{title}}</div>
+    <div v-show="isHao">
+      <div class="modal_box_feedback">
+         <div class="modal_div">
+        		<div class="modal_header color1">
+        			<span>通知</span>
+        			<i></i>
+        		</div>
+        		<div class="modal_foot">
+        			<div ref="rscenter"></div>
+        			<p>{{title}}</p>
+        		</div>
+        </div>
+      </div>
     </div>
-  </div>
 
 </div>
 </template>
 <script>
-/*import {
-  getOid,
-  getUrl
-} from '../../api'*/
+//import {
+//  getOid,
+//  getUrl
+//} from '../../api'
 import iHeader from '../../components/j-header'
 
 export default {
@@ -72,6 +72,10 @@ export default {
   },
   data() {
     return {
+    	is_gd_ali: is_gd_ali(),
+      alipaymin:0,
+      moneyMin:0,
+      moneyMax:0,
       arrayMap:["22","55","166"],
       options:["农业银行","中国银行","招商银行","建设银行","交通银行","工商银行","渤海银行","光大银行","兴业银行","民生银行" ,"中信银行" ,"广发银行" ,"华夏银行" ,"平安银行" ,"邮政储蓄银行" ,"浦发银行" ,"中国银行" ,"华夏银行" ,"北京农商" ,"上海银行" ,"银联支付"],
       bankName:"工商银行",
@@ -90,7 +94,9 @@ export default {
       pay_img_url:"",
       paramsL:"",
       navIndex:0,
-      isShowBank:false
+      isShowBank:false,
+      canSubmit: true,
+      canSubmitMax: true
     }
   },
 
@@ -100,24 +106,45 @@ payonline(j,i){
         i = 0
     }
   this.navIndex = i;
-    console.log(j,"00000")
   this.isShowBank = Number(j.split("isShowBank=")[1]);
-  console.log(this.isShowBank)
   this.paramsL = j;
-
-
 },
+
     submitM() {
+
+ console.log(this.shu,this.moneyMin,this.moneyMax);
+
     if(this.isShowBank){
-      if (this.shu < 100) {
-        this.title = "取款金额不能少于100"
+    	if(Number(this.shu)<Number(this.moneyMin)){
+				this.title = `存款金额不能少于${this.moneyMin}`
+		    this.isHao = true
+		    this.canSumbit=false
+		    setTimeout(() =>{
+		      this.isHao = false
+		      return
+		    }, 1200)
+			}else{
+				 this.canSumbit=true
+			};
+			if(Number(this.shu)>Number(this.moneyMax)){
+				this.canSubmitMax=false
+				this.title = `存款金额不能大于${this.moneyMax}`
+		    this.isHao = true
+		    setTimeout(() =>{
+		      this.isHao = false
+		      return
+		    }, 1200)
+			}else{
+				 this.canSubmitMax=true
+			}
+      if (this.shu < this.alipaymin){
+        this.title = `取款金额不能少于${this.alipaymin}`
         this.isHao = true
         setTimeout(() => {
           this.isHao = false
           return
         }, 1200)
-      }
-      else if (this.isEnd == false) {
+      }else if (this.isEnd == false) {
         this.title = "支付信息获取中"
         this.isHao = true
         setTimeout(() => {
@@ -125,17 +152,17 @@ payonline(j,i){
           return
         }, 600)
         return
-      } else if (this.shu >= 100 && this.isEnd == true) {
+      } else if (this.shu >= this.alipaymin && this.isEnd == true){
         let t = this.paramsL;
         this.payUrl = `${t}&money=${this.shu}`
-
         let payUrl = `${getUrl()}/user/payTheTransfer2?transfer=${this.payUrl}&PayID=${this.bankName}`
-        console.log(payUrl)
-        this.$refs.formPay.setAttribute("action",payUrl);
-
-        this.$refs.formPay.submit();
-      }
-      else {
+      this.$refs.formPay.setAttribute("action",payUrl);
+//				sessionStorage.setItem('payUrl',payUrl);
+        if(this.canSumbit==true&&this.canSubmitMax==true){
+      	this.$refs.formPay.submit();
+//					this.$router.push("/zf")
+        }
+      }else {
         this.title = "操作异常，请重试"
         this.isHao = true
         setTimeout(() => {
@@ -144,19 +171,39 @@ payonline(j,i){
         }, 600)
         return
       }
+    }else{
+    	if(Number(this.shu)<Number(this.moneyMin)){
+				this.title = `存款金额不能少于${this.moneyMin}`
+		    this.isHao = true
+		    this.canSumbit=false
+		    setTimeout(() =>{
+		      this.isHao = false
+		      return
+		    }, 1200)
+			}else{
+				 this.canSumbit=true
+			}
 
+			if(Number(this.shu)>Number(this.moneyMax)){
+				this.canSubmitMax=false
+				this.title = `存款金额不能大于${this.moneyMax}`
+		    this.isHao = true
+		    setTimeout(() =>{
+		      this.isHao = false
+		      return
+		    }, 1200)
+			}else{
+				 this.canSubmitMax=true
+			}
 
-    }
-    else {
-      if (this.shu < 100) {
-        this.title = "取款金额不能少于100"
+      if(this.shu < this.alipaymin){
+        this.title = `取款金额不能少于${this.alipaymin}`
         this.isHao = true
         setTimeout(() => {
           this.isHao = false
           return
         }, 1200)
-      }
-      else if (this.isEnd == false) {
+      }else if (this.isEnd == false){
         this.title = "支付信息获取中"
         this.isHao = true
         setTimeout(() => {
@@ -164,27 +211,27 @@ payonline(j,i){
           return
         }, 600)
         return
-      } else if (this.shu >= 100 && this.isEnd == true) {
+      }else if (this.shu >= this.alipaymin && this.isEnd == true) {
         let t = this.paramsL;
         this.payUrl = `${t}&money=${this.shu}`
-
         let payUrl = `${getUrl()}/user/payTheTransfer2?transfer=${this.payUrl}`
-        this.$refs.formPay.setAttribute("action",payUrl);
+       this.$refs.formPay.setAttribute("action",payUrl);
 
-        this.$refs.formPay.submit();
-      }
-      else {
+//				sessionStorage.setItem('payUrl',payUrl);
+			 if(this.canSumbit==true&&this.canSubmitMax==true){
+         this.$refs.formPay.submit();
+         //this.$router.push("/zf")
+       }
+      }else{
         this.title = "操作异常，请重试"
         this.isHao = true
-        setTimeout(() => {
+        setTimeout(() =>{
           this.isHao = false
           return
         }, 600)
         return
       }
     }
-
-
     },
     dianji(item) {
       this.shu = item;
@@ -195,7 +242,7 @@ payonline(j,i){
     },
     hui() {
       this.$router.push({
-        path: '/order'
+        path: '/order:0'
       })
     }
   },
@@ -203,7 +250,7 @@ payonline(j,i){
   created() {
     this.urlId = this.$route.params.id.split(':')[1];
     this.pay_img_url=`../../../static/images/pay_${this.urlId}.png`
-    console.log(this.urlId)
+
 
     let urlId = "";
     switch (this.urlId) {
@@ -232,18 +279,44 @@ payonline(j,i){
     params.oid = userOid;
     this.$http.post(`${getUrl()}/user/payin`, JSON.stringify(params)).then(res => {
 
+
       if (res.data.msg == "4001") {
-        // let timeStamp = res.data.next.timestap;
-        this.$router.push({
-          path: '/login'
-        }) // 跳转到登陆
+       			sessionStorage.clear();
+						this.isHao = true;
+          	this.title = "您的账户已失效，请重新登录";
+            setTimeout(() => {
+	          	this.isHao = false;
+	          	this.$router.push({
+	            	path: '/login'
+	          	})
+	          },1000)
       } else {
-        console.log(urlId,111);
+       switch (this.urlId) {
+		      case '55':
+		      	this.moneyMin=res.data.moneylimit.bankmin;
+      			this.moneyMax=res.data.moneylimit.bankmax;
+		        break;
+		      case '66':
+		      	this.moneyMin=res.data.moneylimit.wechatmin;
+      			this.moneyMax=res.data.moneylimit.wechatmax;
+
+		        break;
+		      case '77':
+		      	this.moneyMin=res.data.moneylimit.alipaymin;
+      			this.moneyMax=res.data.moneylimit.alipaymax;
+		        break;
+		      case '88':
+						this.moneyMin=res.data.moneylimit.cftpaymin;
+      			this.moneyMax=res.data.moneylimit.cftpaymax;
+		        break;
+		      default:
+		    };
         this.aliPayId = res.data[urlId];
         this.payonline(this.aliPayId[0])
-        console.log(this.aliPayId);
+
         this.isBlue = true;
         this.isEnd = true;
+//      this.alipaymin = res.data.moneylimit.alipaymin;
       }
 
     })
@@ -251,6 +324,8 @@ payonline(j,i){
   }
 }
 </script>
+
+
 <style  lang='less' ref="stylesheet/less" scoped>
 .box {
     background-color: #e5e5e5;
@@ -319,11 +394,10 @@ payonline(j,i){
             text-align: center;
             color: #939a3c;
             font-weight: 600;
-
         }
     }
-
 }
+
 p {
     line-height: 81/40rem;
     padding: 0 27/40rem;
@@ -355,22 +429,21 @@ button:nth-child(2) {
     background: #fff;
     box-shadow: 1px 2px 1px rgba(0,0,0,0.3);
 }
-.modal_box_feedback_regist {
-    z-index: 99999;
-    position: fixed;
-    top: 0;
-    height: 100vh;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    > div {
-        background: rgba(0,0,0,0.5);
-        color: white;
-        padding: 10px 40px;
-        border-radius: 4px;
-    }
-}
+/*.modal_box_feedback_regist {*/
+    /*z-index: 99999;*/
+    /*position: fixed;*/
+    /*top: 0;*/
+    /*height: 100vh;*/
+    /*width: 100%;*/
+    /*text-align: center;*/
+    /*> div {*/
+        /*background: rgba(0,0,0,0.5);*/
+        /*color: white;*/
+        /*padding: 10px 40px;*/
+        /*border-radius: 4px;*/
+        /*width: 70%;*/
+    /*}*/
+/*}*/
 .submit_div_a {
     text-align: center;
     margin-top: 14/20rem;
@@ -427,7 +500,7 @@ button:nth-child(2) {
     height: 46/20rem;
     text-align: center;
     img{
-      width: calc(100% - 20px);
+      width: 120/20rem;
       padding-top: 4/20rem;
 
     }
@@ -472,4 +545,3 @@ button:nth-child(2) {
 }
 
 </style>
-

@@ -1,7 +1,7 @@
 <template>
 <div class="">
 
-  <div class="is-active-lm" @click="hideDailog" v-if="!isHao">
+  <div class="is-active-lm" v-if="!isHao">
 
     <div class="modal-content-lm" v-show="loading">
       <div class="title">投注明细</div>
@@ -25,11 +25,20 @@
     </div>
   </div>
 
-  <div v-show="isHao">
-    <div class="modal_box_feedback">
-      <div>{{title}}</div>
+    <div v-show="isHao">
+      <div class="modal_box_feedback">
+         <div class="modal_div">
+        		<div class="modal_header color1">
+        			<span>通知</span>
+        			<i></i>
+        		</div>
+        		<div class="modal_foot">
+        			<div ref="rscenter"></div>
+        			<p>{{title}}</p>
+        		</div>
+        </div>
+      </div>
     </div>
-  </div>
 
 
   <div class="loading" v-show="!loading && !isHao">
@@ -48,17 +57,18 @@
 </div>
 </template>
 <script>
-/*import {
-
-  getOid,getUrl
-
-} from '../api'*/
+//import {
+//
+//  getOid,getUrl
+//
+//} from '../api'
 
 
 export default {
 
   data() {
     return {
+    	is_gd_ali: is_gd_ali(),
       xuanxiang:'',
       lengthss:1,
       lotteryS: [],
@@ -166,6 +176,11 @@ export default {
       this.$http.post(`${getUrl()}/inup`, JSON.stringify(this.odd), {}).then(res => {
 
         if ((res.data) instanceof Array) {
+        	if(this.is_gd_ali){
+	      			this.$refs.rscenter.style.backgroundImage="url('../../../static/images/suuccen.png')"
+		      	}else{
+		      		this.$refs.rscenter.style.backgroundImage="url('../../../static/images/gdsuuccen.png')"
+		      	}
           this.isHao = true;
           this.title = "恭喜下注成功"
           this.sendParent();
@@ -173,14 +188,17 @@ export default {
 
 
         } else if (res.data.msg == 4001) {
-
+					sessionStorage.clear();
           this.isHao = true;
           this.title = "下注失败";
           setTimeout(this.kadun, 1200);
-          this.$router.push({
-            path: '/login'
-          })
-          setTimeout(this.hideDailog, 100);
+	         setTimeout(() => {
+	          	this.$router.push({
+	            	path: '/login'
+	          	})
+	          },1000)
+
+          setTimeout(this.hideDailog,1000);
         }
 
         else if (res.data.msg == 5001) {

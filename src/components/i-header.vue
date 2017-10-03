@@ -43,7 +43,7 @@
       height: 100%;
       color: #fff;
       span:last-child {
-        line-height: 50px;
+       line-height: 47px;
       }
       .arrows {
         margin-top: 14px;
@@ -54,8 +54,8 @@
       width:0.5rem;
       height:0.8rem;
       position:absolute;
-      top:12px;
-      left:20px;
+      top: 0.6rem;
+      left:-1rem;
     }
   }
 </style>

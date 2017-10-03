@@ -22,7 +22,7 @@
 
 <script>
   import iHeader from '../../components/i-header'
-  /*import {getOid,getUrl} from '../../api'*/
+//  import {getOid,getUrl} from '../../api'
   export default {
 
     data() {
@@ -38,9 +38,15 @@
         prams.oid = oidinfo;
         this.$http.post(`${getUrl()}/getinfo/bet`,JSON.stringify(prams)).then(res => {
           if(res.data.msg==4001){
-            this.$router.push({
-              path: '/login'
-            }) //
+             sessionStorage.clear();
+			this.isHao = true;
+	      	this.title = "您的账户已失效，请重新登录";
+	        setTimeout(() => {
+	          	this.isHao = false;
+	          	this.$router.push({
+	            	path: '/login'
+	          	})
+	          },1000)
           }
           this.finished=res.data[0].res
 

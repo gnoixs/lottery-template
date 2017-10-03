@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-
 Vue.use(Router)
 
 
@@ -9,26 +8,43 @@ Vue.use(Router)
 import myInfo from '../views/My/my-info'
 import myPassword from '../views/My/my-password'
 import myCenter from '../views/My/my-center'
+import ag from '../views/My/my-AG'
 
 import my from '../views/My/my'
+
 // 资金管理
 import order from "../views/Order/order"
 import hahaMoney from "../views/Order/my_money"
 import aliPay from "../views/Order/aliPay"
 import handPay from "../views/Order/handPay"
-
+import zf from "../views/Order/zf"
 
 import todayBuyColor from "../views/today/buy-color"
 import todayWinning from "../views/today/winning"
-// import regist from "../components/regist/regist"
 import myHistroy from '../views/My/my-histroy'
+import todayRule from "../views/Today/rule"
+import noticedetails from "../views/today/noticedetails"
+import noticeCenter from "../views/today/noticeCenter"
+import kefu from "../views/today/kefu"
 
 import passwordZ from "../views/password/password-z"
 import passwordD from "../views/password/password-d"
 import myService from '../views/My/my-service'
+/*import trend     from "../views/trend/trend"*/
+
 import trend     from "../views/trend/trend"
 
+// 活动页面
+import Activity1 from "../views/activity/activity1"
+import Activity2 from "../views/activity/activity2"
+import Activity3 from "../views/activity/activity3"
+import Activity4 from "../views/activity/activity4"
+import Activity5 from "../views/activity/activity5"
+import Activity6 from "../views/activity/activity6"
+
+
 export default new Router({
+
   routes: [
     {
       path: '/index',
@@ -85,7 +101,8 @@ export default new Router({
       meta: {
         pageTitle: getTitle()
       }
-    },{
+    },
+    {
       path: '/my',
       component:my,
       meta: {
@@ -104,6 +121,12 @@ export default new Router({
         pageTitle: getTitle()
       }
     },
+    { path: '/ag',
+    component: ag,
+      meta: {
+        pageTitle: getTitle()
+      }
+    },
     { path: '/myCenter',
     component: myCenter,
       meta: {
@@ -118,8 +141,31 @@ export default new Router({
         pageTitle: getTitle()
       }
     },
-
-    { path: '/handPay',
+		{
+      //游戏规则
+      path: '/todayRule',
+      component: todayRule ,
+      meta: {
+        pageTitle: getTitle()
+      }
+    },
+    {
+     //公告中心
+      path: '/noticeCenter',
+      component: noticeCenter,
+      meta: {
+        pageTitle: getTitle()
+      }
+    },
+    {
+     //公告详情
+      path: '/noticedetails:index',
+      component: noticedetails ,
+      meta: {
+        pageTitle: getTitle()
+      }
+    },
+    { path: '/handPay:zf',
     component: handPay,
       meta: {
         pageTitle: getTitle()
@@ -149,7 +195,7 @@ export default new Router({
     }
     ,
     { // 资金管理
-      path: '/order',
+      path: '/order:id',
       component: order,
       meta: {
         pageTitle: getTitle()
@@ -226,6 +272,62 @@ export default new Router({
       meta: {
         pageTitle: getTitle()
       }
-    }
+    },
+    {
+      path: "/activity1",
+      component: Activity1,
+      meta: {
+        pageTitle: getTitle
+      }
+    },
+    {
+      path: "/activity2",
+      component: Activity2,
+      meta: {
+        pageTitle: getTitle
+      }
+    },
+    {
+      path: "/activity3",
+      component: Activity3,
+      meta: {
+        pageTitle: getTitle
+      }
+    },
+    {
+      path: "/activity4",
+      component: Activity4,
+      meta: {
+        pageTitle: getTitle
+      }
+    },
+    {
+      path: "/activity5",
+      component: Activity5,
+      meta: {
+        pageTitle: getTitle
+      }
+    },
+    {
+      path: "/activity6",
+      component: Activity6,
+      meta: {
+        pageTitle: getTitle
+      }
+    },
+    { 
+      path: '/kefu',
+      component:kefu,
+      meta: {
+        pageTitle: getTitle()
+      }
+    },
+    { 
+      path: '/zf',
+      component:zf,
+      meta: {
+        pageTitle: getTitle()
+      }
+    },
   ]
 })

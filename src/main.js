@@ -18,6 +18,7 @@ import setWechatTitle from './utils/setWechatTitle.js' // 微信标题
 import './utils/rem'
 // 全局css
 import "./assets/css/base.css";
+import "./assets/css/base.less";
 // import jsonp from 'jsonp'
 Vue.use(MuseUI)
 Vue.config.productionTip = false

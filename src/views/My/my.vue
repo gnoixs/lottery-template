@@ -2,28 +2,26 @@
   <!--个人中心-->
   <div class="myCenter" style="height:100%;background:#dbe2ea;">
     <!--头部-->
-    <header class="tohop_head container color1">
+    <header class="tohop_head container color1" :style="{'top': isIosWebview ? 40/40 + 'rem': 0}">
       <div class="text-center">
       	<span  @click="goback" >
       		<img src="../../../static/images/backing_out.png" alt="" />
       	</span>
-        <span>我的</span>
+        <span>个人中心</span>
       </div>
     </header>
 
-    <div class="my_header">
+    <div class="my_header my_bg">
       <div>
-
       </div>
       <div>
-        晚上好,{{im_username}}
+        {{time}},{{im_username}}
       </div>
       <div>
-        用户余额: <i>￥{{im_money}}</i>
+        用户余额: <i>￥{{Number(im_money).toFixed(2)}}</i>
         <img @click="refresh_money" src="../../../static/images/refresh.png"/>
       </div>
     </div>
-
 
     <div class="my_main">
       <ul>
@@ -42,7 +40,7 @@
           </div>
           <span>未结明细</span>
         </li>
-        <li @click="gotoAddress('/Order')">
+        <li @click="gotoAddress('/Order:0')">
           <div class="money_my">
           </div>
           <span>资金管理</span>
@@ -52,6 +50,7 @@
           </div>
           <span>修改取款密码</span>
         </li>
+
         <li  @click='gotoAddress("/myHistroy")' >
           <div class="note_my" >
           </div>
@@ -88,8 +87,17 @@
     </div>
 
     <div v-show="isHao">
-      <div class="modal_box_feedback_regist">
-        <div>{{title}}</div>
+      <div class="modal_box_feedback">
+         <div class="modal_div">
+        		<div class="modal_header color1">
+        			<span>通知</span>
+        			<i></i>
+        		</div>
+        		<div class="modal_foot">
+        			<div ref="rscenter"></div>
+        			<p>{{title}}</p>
+        		</div>
+        </div>
       </div>
     </div>
 
@@ -99,28 +107,42 @@
 
 <script>
 
- /* import {
-    getUrl,
-    getOid
-  } from '../../api'*/
+//  import {
+//    getUrl,
+//    getOid
+//  } from '../../api'
 
 export default {
 
   data() {
     return {
+      isIosWebview:isIosWebview,
       isHao:false,
       im_username:"",
       im_money:"",
       logout:false,
       serviec_url:"",
       window:null,
-      title:""
+      title:"",
+      isWan:"",
+      time:""
     }
   },
 
   methods: {
     gotoAddress(path) {
-      this.$router.push(path)
+	    this.isWan=sessionStorage.getItem('im_username')
+			if(this.isWan=='demo'){
+				if(/^\/Order*/.test(path)||/^\/passwordD*/.test(path)||/^\/passwordD*/.test(path)||/^\/myHistroy*/.test(path)||/^\/todayBuyColor*/.test(path)||/^\/myHistroy*/.test(path)||/^\/todayWinning*/.test(path)){
+					this.title = "请登录正式会员账号！"
+		            this.isHao = true
+		            setTimeout(() => {
+		              this.isHao = false
+		            }, 600);
+		            return
+				}
+			}
+    this.$router.push(path)
     },
     refresh_money(){
       let oidInfo = getOid();
@@ -128,7 +150,8 @@ export default {
       odd.oid = oidInfo;
       this.im_money=""
       this.$http.post(`${getUrl()}/getinfo/money`,JSON.stringify(odd)).then(res => {
-        this.im_money=res.data.money
+      sessionStorage.setItem('im_money', JSON.stringify(res.data.money))
+      this.im_money=res.data.money
       })
     },
     quxiao(){
@@ -156,17 +179,29 @@ export default {
             this.isHao = false
             return
           },1200)
-
         }
       })
     }
   },
-
-
   created(){
+    function Get_Greetings() {
+      var now = new Date();
+      var times = now.getHours();
+      if(times>=0 && times<6){return "晚上好"}
+      if(times>=6 && times<9){return "早上好"}
+      if(times>=9 && times<11){return "上午好"}
+      if(times>=11 && times<13){return "中午好"}
+      if(times>=13 && times<17){return "下午好"}
+      if(times>=17 && times<19){return "傍晚好"}
+      if(times>=19 && times<24){return "晚上好"}
+    }
+
+    this.time=Get_Greetings()
+
     if(sessionStorage.getItem('im_money')){
       this.im_username=sessionStorage.getItem('im_username')
-      this.im_money=sessionStorage.getItem('im_money')
+      this.im_money=JSON.parse(sessionStorage.getItem('im_money'))
+     console.log(this.im_money)
     }
     else {
       this.$router.push("/login")
@@ -505,7 +540,6 @@ button{
       height: 100/20rem;
       border-right: 1px solid #e0e1e5;
       border-bottom: 1px solid #e0e1e5;
-
       >div{
         height: 70/20rem;
         background-position: center;
@@ -518,7 +552,6 @@ button{
     >li:nth-of-type(7),li:nth-of-type(8),li:nth-of-type(9){
       border-bottom: 0;
     }
-
   }
 }
 .tohop_head{
@@ -529,11 +562,10 @@ button{
 }
 
 .my_header{
-  background-image: url(../../../static/images/avatar_bg.jpg);
+
   background-repeat: no-repeat;
   background-size: cover;
   text-align: center;
-  color: #9ac5f2;
   margin-top: 40/20rem;
   padding-top: 7/20rem;
   >div:nth-of-type(1){
@@ -555,7 +587,13 @@ button{
   }
 }
 
+/*.my_bg{  background-image: url(../../../static/images/bg2_gd.jpg);  color: #ffda22;  }*/
+
+/*.my_bg{  background-image: url(../../../static/images/avatar_bg.jpg);  color: #99c5f6;  }*/
 
 
+.avatar_gd{
+  background-image: url(../../../static/images/sm_avatar.png);
+}
 
 </style>

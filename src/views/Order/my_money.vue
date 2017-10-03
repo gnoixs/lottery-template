@@ -6,10 +6,7 @@
 	<div>
 		<div class="title">为了您的账户安全，真实姓名要与绑定的银行卡姓名一致</div>
 		<div>
-			<div class="name">
-				<span>姓&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;名：</span>
-				<input type="" name="" placeholder="请输入姓名" v-model="userName" onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,'')">
-			</div>
+
 			<div class="bank">
 				<span>银&nbsp;行&nbsp;卡&nbsp;号：</span>
 				<input type="" name="" placeholder="请输入银行卡号" v-model="bankCode" minlength="16" maxlength="19" onkeyup="this.value=this.value.replace(/\D/g,'')"/>
@@ -38,8 +35,17 @@
 		</div>
 
     <div v-show="isHao">
-      <div class="modal_box_feedback_login">
-        <div>{{title}}</div>
+      <div class="modal_box_feedback">
+         <div class="modal_div">
+        		<div class="modal_header color1">
+        			<span>通知</span>
+        			<i></i>
+        		</div>
+        		<div class="modal_foot">
+        			<div ref="rscenter"></div>
+        			<p>{{title}}</p>
+        		</div>	
+        </div>
       </div>
     </div>
 	</div>
@@ -47,9 +53,9 @@
 </template>
 <script>
 import iHeader from '../../components/i-header'
-/*import {
-  getOid,getUrl
-} from '../../api'*/
+//import {
+//  getOid,getUrl
+//} from '../../api'
 export default {
 
     components: {
@@ -57,11 +63,11 @@ export default {
     },
     data () {
 	    return {
+	    		is_gd_ali: is_gd_ali(),
 				isHao:false,
 				title:"",
 				bankName:"工商银行",
 				bankCode:"",
-				userName:"",
 				bankAdress:"",
 				options:["工商银行","建设银行","农业银行","招商银行","交通银行","兴业银行","中国银行","广发银行","深发银行","中信银行","光大银行","浦发银行","中国邮政","民生银行","平安银行(原深圳发展银行)","华夏银行"],
 	      activeTab: 'all'
@@ -69,7 +75,7 @@ export default {
 	  },
 	  methods: {
     submitBank(){
-			if (this.bankCode==""||this.bankAdress==""||this.userName=="") {
+			if (this.bankCode==""||this.bankAdress=="") {
 				this.title = "填写信息不能为空"
 				this.isHao = true
 				setTimeout(() => {
@@ -94,16 +100,26 @@ export default {
 				params.bank_address = this.bankAdress;
 				this.$http.post(`${getUrl()}/user/info`, JSON.stringify(params)).then(res => {
 					if (res.data.msg == "4001") {
-						// let timeStamp = res.data.next.timestap;
-						this.$router.push({
-							path: '/login'
-						}) // 跳转到登陆
+						sessionStorage.clear();
+						this.isHao = true;
+			          	this.title = "您的账户已失效，请重新登录";
+			            setTimeout(() => {
+				          	this.isHao = false;
+				          	this.$router.push({
+				            	path: '/login'
+				          	})
+				          },1000)
 					} else if(res.data.msg==2006){
+						if(this.is_gd_ali){
+			      			this.$refs.rscenter.style.backgroundImage="url('../../../static/images/suuccen.png')"
+				      	}else{
+				      		this.$refs.rscenter.style.backgroundImage="url('../../../static/images/gdsuuccen.png')"
+				      	}
 						this.title = "操作成功"
 						this.isHao = true
 						setTimeout(() => {
 							 this.$router.push({
-											path: '/order'
+											path: '/order:0'
 										})
 							this.isHao = false
 							return

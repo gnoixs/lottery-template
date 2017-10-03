@@ -23,18 +23,27 @@
       <input style="border-top:none" v-model="new_password_again"  type="password" placeholder="请再次确认新的登录密码" onkeyup="value=value.replace(/[^\a-z0-9]/g,'')" maxlength="16"/>
     </div>
     <div class="btn1">
-      <button @click="submit">确认修改</button>
+      <button @click="submit" class="color1">确认修改</button>
     </div>
     <div v-show="isHao">
-      <div class="modal_box_feedback_login">
-        <div>{{title}}</div>
+      <div class="modal_box_feedback">
+         <div class="modal_div">
+        		<div class="modal_header color1">
+        			<span>通知</span>
+        			<i></i>
+        		</div>
+        		<div class="modal_foot">
+        			<div ref="rscenter"></div>
+        			<p>{{title}}</p>
+        		</div>	
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
   import iHeader from '../../components/i-header'
-  /*import {getOid,getUrl} from '../../api'*/
+//  import {getOid,getUrl} from '../../api'
   export default {
     data() {
       return {
@@ -58,11 +67,16 @@
           this.$http.post(`${getUrl()}/user/info`,JSON.stringify(prams)).then(res => {
 
             if (res.data.msg == "4001") {
-              this.$router.push({
-                path: '/login'
-              }) // 跳转到登陆
-            }
-            else if(res.data.msg == "3003"){
+              	sessionStorage.clear();
+				this.isHao = true;
+		      	this.title = "您的账户已失效，请重新登录";
+		        setTimeout(() => {
+		          	this.isHao = false;
+		          	this.$router.push({
+		            	path: '/login'
+		          	})
+		          },1000)
+           }else if(res.data.msg == "3003"){
               this.title="缺失必填项"
               this.isHao=true
               setTimeout(()=>{

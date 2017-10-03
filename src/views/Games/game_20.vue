@@ -8,7 +8,9 @@ xgl_time// 主页
   <dailog-s :type_code="type_code" :game_code="game_code" :money="money_s" :round="round" :lotteryM="objects" :typecode="typecode" v-if="showDailogS" v-on:listenToChildEvent="showMsgFromChild"></dailog-s>
   <lotteryHeader :title="title" :game_code="game_code" @regulation_click="regulation_control=true" ></lotteryHeader>
 
-  <lotteryArea :zMoney="zMoney" :lotteryObj="body" :endtime="endtime" :fentime="fentime" v-if="isOk"></lotteryArea>
+  <!--<div class="game_main">-->
+
+  <lotteryArea class="game_20" :zMoney="zMoney" :lotteryObj="body" :endtime="endtime" :fentime="fentime" v-if="isOk"  gameType="20"></lotteryArea>
 
   <div class="nav_o">
 
@@ -33,10 +35,9 @@ xgl_time// 主页
         </li>
       </ul>
     </div>
-
     <ul>
       <li v-for="(item,j) in lotteryList.body">
-        <span class='o_title'>{{item._name}}</span>
+      <!--  <span class='o_title'>{{item._name}}</span>-->
         <ul>
           <li v-for="(item,i) in item.list">
             <button :class="{active3:item.isCheck}" @click="isCheck(j,i,item)" :disabled="fengpan">
@@ -48,22 +49,32 @@ xgl_time// 主页
       </li>
     </ul>
   </section>
+  <!--</div>-->
 
   <section class="bet_bar">
   <div>
-      <i class="iconfont_reset"></i>
+   <!--   <i class="iconfont_reset"></i>-->
       <span class="qin" @click="qingkong">重置</span>
     </div>
-    <div><input type="number" v-model="money_s" placeholder="输入金额" @input="changes_m()" min="1" /></div>
-    <div><button :class="{color1:isBlue}" type="button" :disabled="!isBlue" @click="subMit">确认下注</button><span class="color_shuzi" v-show="xshuzi>0">{{xshuzi}}</span></div>
+    <div><span  style="color:#FFFFFF"  v-show="xshuzi>0">{{xshuzi}}</span><input  pattern="[0-9]*" v-model="money_s" placeholder="输入金额" @input="changes_m()" min="1" /></div>
+    <div><button :class="{color1:isBlue}" class="gdcolor"  type="button" :disabled="!isBlue" @click="subMit">确认下注</button></div>
 
   </section>
 
 
   <div v-if="isShowS">
-    <div class="modal_box_feedback">
-      <div>{{wenzi}}</div>
-    </div>
+   <div class="modal_box_feedback">
+         <div class="modal_div">
+        		<div class="modal_header color1">
+        			<span>通知</span>
+        			<i></i>
+        		</div>
+        		<div class="modal_foot">
+        			<div ref="rscenter"></div>
+        			<p>{{wenzi}}</p>
+        		</div>
+        </div>
+      </div>
   </div>
   <!-- <foot-guide></foot-guide> -->
   <div :style='de?"display:block":"display:none"' style="position: fixed;top:0;left:0;background:#000;opacity:.8;width:100%;height:100%;z-index:6">
@@ -72,500 +83,6 @@ xgl_time// 主页
     </div>
   </div>
 
-
-    <div v-show="regulation_control" class="regulation">
-      <div>
-        <div class="header_regu">
-          <div></div>
-          <h5>香港六合彩</h5>
-          <div></div>
-        </div>
-        <div>
-          <p>以下所有投注皆含本金。</p>
-        </div>
-        <div>
-          <p>1.特码</p>
-        </div>
-        <div>
-          <p>特小：开出的特码，(01~24)小于或等于24。</p>
-        </div>
-        <div>
-          <p>特大：开出的特码，(25~48)小于或等于48。</p>
-        </div>
-        <div>
-          <p>和局：特码为49时。</p>
-        </div>
-        <div>
-          <p>3.特码单双</p>
-        </div>
-        <div>
-          <p>特双：特码为双数，如18、20、34、42。</p>
-        </div>
-        <div>
-          <p>特单：特码为单数，如01，11，35，47。</p>
-        </div>
-        <div>
-          <p>和局：特码为49时。</p>
-        </div>
-        <div>
-          <p>4.特码合数单双</p>
-        </div>
-        <div>
-          <p>特双：指开出特码的个位加上十位之和为'双数'，如02，11，33，44。</p>
-        </div>
-        <div>
-          <p>特单：指开出特码的个位加上十位之和为'单数'，如01，14，36，47。</p>
-        </div>
-        <div>
-          <p>和局：特码为49时。</p>
-        </div>
-        <div>
-          <p>5.特码尾数大小</p>
-        </div>
-        <div>
-          <p>特尾大：5尾~9尾为大，如05、18、19。</p>
-        </div>
-        <div>
-          <p>特尾小：0尾~4尾为小，如01，32，44。</p>
-        </div>
-        <div>
-          <p>和局：特码为49时。</p>
-        </div>
-        <div>
-          <p>6.特码半特</p>
-        </div>
-        <div>
-          <p>以特码大小与特码单双游戏为一个投注组合；当期特码开出符合投注组合，即视为中奖；若当期特码开出49号，其余情形视为不中奖。</p>
-        </div>
-        <div>
-          <p>大单：25、27、29、31、33、35、37、39，41、43、45、47</p>
-        </div>
-        <div>
-          <p>大双：26、28、30、32、34、36、38、40，42、44、46、48</p>
-        </div>
-        <div>
-          <p>小单：01、03、05、07、09、11、13、15，17、19、21、23</p>
-        </div>
-        <div>
-          <p>小双：02、04、06、08、10、12、14、16，18、20、22、24</p>
-        </div>
-        <div>
-          <p>7.特码合数大小</p>
-        </div>
-        <div>
-          <p>合数大：特码的个位加上十位之和来决定大小，和数大于或等于7为大。</p>
-        </div>
-        <div>
-          <p>合数小：特码的个位加上十位之和来决定大小，和数小于或等于6为小。</p>
-        </div>
-        <div>
-          <p>和局：特码为49时。</p>
-        </div>
-        <div>
-          <p>8.正码</p>
-        </div>
-        <div>
-          <p>香港六合彩公司每期开出的前面六个号码为正码，下注号码如在六个正码号码里中奖。</p>
-        </div>
-        <div>
-          <p>9.总和大小</p>
-        </div>
-        <div>
-          <p>总和大：所以七个开奖号码的分数总和大于或等于175。</p>
-        </div>
-        <div>
-          <p>总和小：所以七个开奖号码的分数总和小于或等于174。</p>
-        </div>
-        <div>
-          <p>10.总和单双</p>
-        </div>
-        <div>
-          <p>总和单：所以七个开奖号码的分数总和是'单数'，如分数总和是133、197。</p>
-        </div>
-        <div>
-          <p>总和双：所以七个开奖号码的分数总和是'双数'，如分数总和是120、188。</p>
-        </div>
-        <div>
-          <p>11.正肖</p>
-        </div>
-        <div>
-          <p>以开出的6个正码做游戏，只要有1个落在下注生肖范围内，视为中奖。如超过1个正码落在下注生肖范围内 ，派彩将倍增！如：下注＄100.-正肖龙倍率1.8。</p>
-        </div>
-        <div>
-          <p>6个正码开出01，派彩为＄80</p>
-        </div>
-        <div>
-          <p>6个正码开出01，13，派彩为＄160</p>
-        </div>
-        <div>
-          <p>6个正码开出01，13，25，派彩为＄240</p>
-        </div>
-        <div>
-          <p>6个正码开出01，13，25，37，派彩为＄320</p>
-        </div>
-        <div>
-          <p>6个正码开出01，13，25，37，49，派彩为＄320</p>
-        </div>
-        <div>
-          <p>12.正码特</p>
-        </div>
-        <div>
-          <p>正码特是指 正1特、正2特、正3特、正4特、正5特、正6特。</p>
-        </div>
-        <div>
-          <p>其下注的正码特号与现场摇珠开出之正码其开奖顺序及开奖号码相同，视为中奖。</p>
-        </div>
-        <div>
-          <p>如现场摇珠第一个正码开奖为49号，下注第一个正码特为49则视为中奖，其它号码视为不中奖。</p>
-        </div>
-        <div>
-          <p>13.正码过关</p>
-        </div>
-        <div>
-          <p>可同时挑选多项赛事，串联成投注组合，其赔率为所选串当时赔率的总乘积。</p>
-        </div>
-        <div>
-          <p>只要当期所开出之中奖结果符合您所选定之串联赛事，即视为中奖。</p>
-        </div>
-        <div>
-          <p>如投注组合中某一个号码为49号和时，该组合将该串赔率以1为计算。</p>
-        </div>
-        <div>
-          <p>14.正码1-6</p>
-        </div>
-        <div>
-          <p>香港六合彩公司当期开出之前6个号码叫正码。第一时间出来的叫正码1，依次为正码2、正码3┅┅ 正码6(并不以号码大小排序)。正码1、正码2、正码3、正码4、正码5、正码6的大小单双合单双和特别号码的大小单双规则相同，如正码1为31，则正码1为大，为单，为合双，为合小；正码2为08，则正码2为小，为双，为合双，为合大；号码为49则为和。假如投注组合符合中奖结果，视为中奖。 正码1-6色波下注开奖之球色与下注之颜色相同时，视为中奖。其余情形视为不中奖。</p>
-        </div>
-        <div>
-          <p>15.半波</p>
-        </div>
-        <div>
-          <p>以特码色波和特单，特双，特大，特小为一个投注组合，当期特码开出符合投注组合，即视为中奖； 若当期特码开出49号，则视为和局；其余情形视为不中奖。</p>
-        </div>
-        <div>
-          <p>16.半半波</p>
-        </div>
-        <div>
-          <p>以特码色波和特单双及特大小等游戏为一个投注组合，当期特码开出符合投注组合，即视为中奖； 若当期特码开出49号，则视为和局；其余情形视为不中奖。</p>
-        </div>
-        <div>
-          <p>17.特码生肖</p>
-        </div>
-        <div>
-          <p>生肖顺序为 鼠 >牛 >虎 >兔 >龙 >蛇 >马 >羊 >猴 >鸡 >狗 >猪 。如今年是羊年，就以羊为开始，依顺序将49个号码分为12个生肖『如下』</p>
-        </div>
-        <div>
-          <p>羊：01、13、25、37、49</p>
-        </div>
-        <div>
-          <p>猴：12、24、36、48</p>
-        </div>
-        <div>
-          <p>鸡：11、23、35、47</p>
-        </div>
-        <div>
-          <p>狗：10、22、34、46</p>
-        </div>
-        <div>
-          <p>猪：09、21、33、45</p>
-        </div>
-        <div>
-          <p>鼠：08、20、32、44</p>
-        </div>
-        <div>
-          <p>牛：07、19、31、43</p>
-        </div>
-        <div>
-          <p>虎：06、18、30、42</p>
-        </div>
-        <div>
-          <p>兔：05、17、29、41</p>
-        </div>
-        <div>
-          <p>龙：04、16、28、40</p>
-        </div>
-        <div>
-          <p>蛇：03、15、27、39</p>
-        </div>
-        <div>
-          <p>马：02、14、26、38</p>
-        </div>
-        <div>
-          <p>若当期特别号，落在下注生肖范围内，视为中奖 。</p>
-        </div>
-        <div>
-          <p>18.特码色波</p>
-        </div>
-        <div>
-          <p>香港六合彩49个号码球分别有红、蓝、绿三种颜色，以特码开出的颜色和投注的颜色相同视为中奖，颜色代表如下:</p>
-        </div>
-        <div>
-          <p>红波：01 ,02 ,07 ,08 ,12 ,13 ,18 ,19 ,23 ,24 ,29 ,30 ,34 ,35 ,40 ,45 ,46</p>
-        </div>
-        <div>
-          <p>蓝波：03 ,04 ,09 ,10 ,14 ,15 ,20 ,25 ,26 ,31 ,36 ,37 ,41 ,42 ,47 ,48</p>
-        </div>
-        <div>
-          <p>绿波：05 ,06 ,11 ,16 ,17 ,21 ,22 ,27 ,28 ,32 ,33 ,38 ,39 ,43 ,44 ,49</p>
-        </div>
-        <div>
-          <p>19.特码头数</p>
-        </div>
-        <div>
-          <p>特码头数：是指特码属头数的号码</p>
-        </div>
-        <div>
-          <p>"0"头：01、02、03、04、05、06、07、08、09</p>
-        </div>
-        <div>
-          <p>"1"头：10、11、12、13、14、15、16、17、18、19</p>
-        </div>
-        <div>
-          <p>"2"头：20、21、22、23、24、25、26、27、28、29</p>
-        </div>
-        <div>
-          <p>"3"头：30、31、32、33、34、35、36、37、38、39</p>
-        </div>
-        <div>
-          <p>"4"头：40、41、42、43、44、45、46、47、48、49</p>
-        </div>
-        <div>
-          <p>例如：开奖结果特别号码为21则2头为中奖，其他头数都不中奖。</p>
-        </div>
-        <div>
-          <p>20.特码尾数</p>
-        </div>
-        <div>
-          <p>特码尾数：是指特码属尾数的号码。</p>
-        </div>
-        <div>
-          <p>"0"尾：10、20、30、40</p>
-        </div>
-        <div>
-          <p>"1"尾：01、11、21、31、41</p>
-        </div>
-        <div>
-          <p>"2"尾：02、12、22、32、42</p>
-        </div>
-        <div>
-          <p>"3"尾：03、13、23、33、43</p>
-        </div>
-        <div>
-          <p>"4"尾：04、14、24、34、44</p>
-        </div>
-        <div>
-          <p>"5"尾：05、15、25、35、45</p>
-        </div>
-        <div>
-          <p>"6"尾：06、16、26、36、46</p>
-        </div>
-        <div>
-          <p>"7"尾：07、17、27、37、47</p>
-        </div>
-        <div>
-          <p>"8"尾：08、18、28、38、48</p>
-        </div>
-        <div>
-          <p>"9"尾：09、19、29、39、49</p>
-        </div>
-        <div>
-          <p>例如：开奖结果特别号码为21则1尾数为中奖，其他尾数都不中奖。</p>
-        </div>
-        <div>
-          <p>21.五行</p>
-        </div>
-        <div>
-          <p>挑选一个五行选项为一个组合，若开奖号码的特码在此组合内，即视为中奖；若开奖号码的特码亦不在此组合内，即视为不中奖；</p>
-        </div>
-        <div>
-          <p>金：01、02、15、16、23、24、31、32、45、46</p>
-        </div>
-        <div>
-          <p>木：05、06、13、14、27、28、35、36、43、44</p>
-        </div>
-        <div>
-          <p>水：03、04、11、12、19、20、33、34、41、42、49</p>
-        </div>
-        <div>
-          <p>火：07、08、21、22、29、30、37、38</p>
-        </div>
-        <div>
-          <p>土：09、10、17、18、25、26、39、40、47、48</p>
-        </div>
-        <div>
-          <p>22.平特一肖</p>
-        </div>
-        <div>
-          <p>指开奖的7个号码中含有所属生肖的一个或多个号码，但派彩指派一次，即不论同生肖号码出现一个或多个号码都指派一次。</p>
-        </div>
-        <div>
-          <p>羊：01、13、25、37、49</p>
-        </div>
-        <div>
-          <p>猴：12、24、36、48</p>
-        </div>
-        <div>
-          <p>鸡：11、23、35、47</p>
-        </div>
-        <div>
-          <p>狗：10、22、34、46</p>
-        </div>
-        <div>
-          <p>猪：09、21、33、45</p>
-        </div>
-        <div>
-          <p>鼠：08、20、32、44</p>
-        </div>
-        <div>
-          <p>牛：07、19、31、43</p>
-        </div>
-        <div>
-          <p>虎：06、18、30、42</p>
-        </div>
-        <div>
-          <p>兔：05、17、29、41</p>
-        </div>
-        <div>
-          <p>龙：04、16、28、40</p>
-        </div>
-        <div>
-          <p>蛇：03、15、27、39</p>
-        </div>
-        <div>
-          <p>马：02、14、26、38</p>
-        </div>
-        <div>
-          <p>23.平特尾数</p>
-        </div>
-        <div>
-          <p>指开奖的7个号码中含有所属生肖的一个或多个号码，但派彩指派一次，即不论同生肖号码出现一个或多个号码都指派一次。</p>
-        </div>
-        <div>
-          <p>"0"尾：10、20、30、40</p>
-        </div>
-        <div>
-          <p>"1"尾：01、11、21、31、41</p>
-        </div>
-        <div>
-          <p>"2"尾：02、12、22、32、42</p>
-        </div>
-        <div>
-          <p>"3"尾：03、13、23、33、43</p>
-        </div>
-        <div>
-          <p>"4"尾：04、14、24、34、44</p>
-        </div>
-        <div>
-          <p>"5"尾：05、15、25、35、45</p>
-        </div>
-        <div>
-          <p>"6"尾：06、16、26、36、46</p>
-        </div>
-        <div>
-          <p>"7"尾：07、17、27、37、47</p>
-        </div>
-        <div>
-          <p>"8"尾：08、18、28、38、48</p>
-        </div>
-        <div>
-          <p>"9"尾：09、19、29、39、49</p>
-        </div>
-        <div>
-          <p>例如：开奖结果正码号码为11、31、42、44、35、32特别号码为21则1尾2尾4尾5尾都为中奖，其他尾数都不中奖。</p>
-        </div>
-        <div>
-          <p>三中二：所投注的每三个号码为一组合，若其中2个是开奖号码中的正码，即为三中二，视为中奖；若3个都是开奖号码中的正码，即为三中二之中三，其余情形视为不中奖，如06、07、08 为一组合，开奖号码中有06、07两个正码，没有08，即为三中二，按三中二赔付；如开奖 号码中有06、07、08三个正码，即为三中二之中三，按中三赔付；如出现1个或没有，视为不中奖 。</p>
-        </div>
-        <div>
-          <p>四全中：选择投注号码每四个为一组（四个或四个以上），兑奖号为正码，如四个号码都在开奖号码的正码里面，视为中奖，其他情形都视为不中奖 。</p>
-        </div>
-        <div>
-          <p>三全中：所投注的每三个号码为一组合，若三个号码都是开奖号码之正码，视为中奖，其余情形视为 不中奖。如06、07、08三个都是开奖号码之正码，视为中奖，如两个正码加上一个特别号 码视为不中奖 。</p>
-        </div>
-        <div>
-          <p>二全中：所投注的每二个号码为一组合，二个号码都是开奖号码之正码，视为中奖，其余情形视为不 中奖（含一个正码加一个特别号码之情形）。</p>
-        </div>
-        <div>
-          <p>二中特：所投注的每二个号码为一组合，二个号码都是开奖号码之正码，叫二中特之中二；若其中一 个是正码，一个是特别号码，叫二中特之中特；其余情形视为不中奖 。</p>
-        </div>
-        <div>
-          <p>特串：所投注的每二个号码为一组合，其中一个是正码，一个是特别号码，视为中奖，其余情形视为不中奖（含二个号码都是正码之情形） 。</p>
-        </div>
-        <div>
-          <p>25.连肖连尾</p>
-        </div>
-        <div>
-          <p>生肖（尾数）所对应的号码和特码生肖（尾数）项目的一样；一个生肖（尾数）对应多个号码，不论同生肖（尾数）的号码出现一个或多个，派彩只派一次。每个生肖（尾数）都有自己的赔率，下注组合的总赔率，取该组合生肖（尾数）的最低赔率为总赔率。</p>
-        </div>
-        <div>
-          <p>二连尾:选择二个尾数为一投注组合进行下注。该注的二个尾数必须在当期开出的7个开奖号码相对应的尾数中，视为中奖。</p>
-        </div>
-        <div>
-          <p>三连尾:选择三个尾数为一投注组合进行下注。该注的三个尾数必须在当期开出的7个开奖号码相对应的尾数中，视为中奖。</p>
-        </div>
-        <div>
-          <p>四连尾:选择四个尾数为一投注组合进行下注。该注的四个尾数必须在当期开出的7个开奖号码相对应的尾数中，视为中奖。</p>
-        </div>
-        <div>
-          <p>五连尾:选择五个尾数为一投注组合进行下注。该注的五个尾数必须在当期开出的7个开奖号码相对应的尾数中，视为中奖。</p>
-        </div>
-        <div>
-          <p>二连肖:选择二个生肖为一投注组合进行下注。该注的二个生肖必须在当期开出的7个开奖号码相对应的生肖中，视为中奖。</p>
-        </div>
-        <div>
-          <p>三连肖:选择三个生肖为一投注组合进行下注。该注的三个生肖必须在当期开出的7个开奖号码相对应的生肖中，视为中奖。</p>
-        </div>
-        <div>
-          <p>四连肖:选择四个生肖为一投注组合进行下注。该注的四个生肖必须在当期开出的7个开奖号码相对应的生肖中，视为中奖。</p>
-        </div>
-        <div>
-          <p>五连肖:选择五个生肖为一投注组合进行下注。该注的五个生肖必须在当期开出的7个开奖号码相对应的生肖中，视为中奖。</p>
-        </div>
-        <div>
-          <p>26.合肖</p>
-        </div>
-        <div>
-          <p>挑选2-11个生肖『排列如同生肖』为一个组合，并选择开奖号码的特码是否在此组合内『49号除外』，即视为中奖；若当期特码开出49号，则所有组合皆视为和局。</p>
-        </div>
-        <div>
-          <p>27.自选不中</p>
-        </div>
-        <div>
-          <p>挑选最少5个号码为一投注组合进行下注。当期开出的7个开奖号码都没有在该下注组合中，即视为中奖。每个号码都有自己的赔率，下注组合的总赔率，取该组合号码的最低赔率为总赔率。如下注组合为1-2-3-4-5，开奖号码为6，7，8，9，10，11，12，即为中奖，如果开奖号码为5，6，7，8，9，10，11，那麽为不中奖。</p>
-        </div>
-        <div>
-          <p>28.总肖</p>
-        </div>
-        <div>
-          <p>当期号码(所有正码与最後开出的特码)开出的不同生肖总数，与所投注之预计开出之生肖总数合(不用指定特定生肖)，则视为中奖，其余情形视为不中奖。例如：如果当期号码为19、24、12、34、40、39 特别号：49，总计六个生肖，若选总肖【6】则为中奖(请注意：49号亦算输赢，不为和）。</p>
-        </div>
-        <div>
-          <p>29.总肖单双</p>
-        </div>
-        <div>
-          <p>当期号码（正码和特码）开出的不同生肖总数若为单数则为单，若为双数则为双。</p>
-        </div>
-        <div>
-          <p>30.七色波</p>
-        </div>
-        <div>
-          <p>以开出的7个色波，那种颜色最多为中奖。 开出的6个正码各以1个色波计，特别号以1.5个色波计。而以下3种结果视为和局。</p>
-        </div>
-        <div>
-          <p>1： 6个正码开出3蓝3绿，而特别码是1.5红</p>
-        </div>
-        <div>
-          <p>2： 6个正码开出3蓝3红，而特别码是1.5绿</p>
-        </div>
-        <div>
-          <p>3： 6个正码开出3绿3红，而特别码是1.5蓝</p>
-        </div>
-        <div>
-          <p>如果出现和局，所有投注红，绿，蓝七色波的金额将全数退回，会员也可投注和局</p>
-        </div>
-      </div>
-      <i @click="regulation_control=false" class="icon-guanbi iconfont"></i>
-    </div>
 
 
 </div>
@@ -583,12 +100,12 @@ import dailogW from '../../components/dailogW.vue'
 import dailogS from '../../components/dailogS.vue'
 //import BScroll from 'better-scroll'
 
-/*import {
-  loginTrue,
-  getOid,
-  getXglhc,
-  getUrl
-} from '../../api'*/
+//import {
+//  loginTrue,
+//  getOid,
+//  getXglhc,
+//  getUrl
+//} from '../../api'
 // import drawer from '../../components/drawer'
 // ,"正码特","正码1-6","过关","连码","半波","一肖\尾数","特码生肖","合肖","生肖连","位数连","全部中"
 export default {
@@ -614,6 +131,7 @@ export default {
       isShowS: false,
       zhanshi: false,
       regulation_control:false,
+      isHao:false,
 
       datas: [{
           // claaName: "cqList1",
@@ -1047,11 +565,15 @@ export default {
 
 
           if (res.data.msg == "4001") {
-            // let timeStamp = res.data.next.timestap;
-
-            this.$router.push({
-              path: '/login'
-            }) // 跳转到登陆
+            sessionStorage.clear();
+						this.isHao = true;
+          	this.title = "您的账户已失效，请重新登录";
+            setTimeout(() => {
+	          	this.isHao = false;
+	          	this.$router.push({
+	            	path: '/login'
+	          	})
+	          },1000)
           } else {
             this.zMoney = res.data.money
 
@@ -1154,6 +676,8 @@ export default {
 
     },
     changes_m() {
+
+      this.money_s = this.money_s.replace(/[^0-9]/g, "");
 
       if (!this.isEmptyObject(this.object) && this.money_s > 0) {
         this.isBlue = true;
@@ -1345,41 +869,6 @@ export default {
     },
 
 
-
-    // subMit() {
-    //   this.oid_info = getOid();
-    //   let lottry_s = document.getElementsByClassName("input_a")
-    //   let string = '';
-    //   let money = 0;
-    //   for (let i = 0; i < lottry_s.length; i++) {
-    //     if (lottry_s[i].value > 0) {
-    //       string = `${string}&${lottry_s[i].name}=${lottry_s[i].value}`;
-    //       money = money + parseInt(lottry_s[i].value);
-    //     }
-    //   }
-    //   this.type_code = this.lotteryList.code
-    //   string = `game_code=${this.game_code}&type_code=${this.type_code}&round=${this.round}&oid=${this.oid_info}${string}`
-    //   let headers = new Headers();
-
-    //   headers.append('Content-Type', 'application/x-www-form-urlencoded');
-    //   this.$http.post('http://jmyl888.com/newapi/InOrder', encodeURI(string), {
-    //     headers: headers
-    //   }).then(res => {
-    //     if (res.data.error_no == 505) {
-    //       //未登陆
-
-    //
-    //       this.$router.push({
-    //         path: '/login'
-    //       }) //跳转到登陆
-    //     } else {
-    //       this.codeMessage = money
-    //       this.dialog = true
-    //       this.dialog = ''
-    //     }
-    //   })
-    // },
-
   },
   computed: mapGetters([
     'showDailogQ',
@@ -1433,11 +922,15 @@ export default {
 
 
         if (res.data.msg == "4001") {
-          // let timeStamp = res.data.next.timestap;
-
-          this.$router.push({
-            path: '/login'
-          }) // 跳转到登陆
+          sessionStorage.clear();
+						this.isHao = true;
+          	this.title = "您的账户已失效，请重新登录";
+            setTimeout(() => {
+	          	this.isHao = false;
+	          	this.$router.push({
+	            	path: '/login'
+	          	})
+	          },1000)
         } else {
 
           this.shuju = getXglhc();
@@ -1450,6 +943,8 @@ export default {
           this.endtime = res.data.next.endtime - timeStamp;
           this.round = res.data.next.round;
           let loaclTime = this.endtime + newTime;
+          this.zMoney = res.data.lcurrency;
+          sessionStorage.setItem('im_money', JSON.stringify(res.data.lcurrency))
 
           // localStorage.setItem('xgl_time', res.data.next.endtime)
           localStorage.setItem('xgl_time', loaclTime)
@@ -1482,12 +977,11 @@ export default {
   },
   watch: {
     endtime: function() {
-      if (this.endtime == 0) {
+      if (this.endtime == 0||this.endtime ==200||this.endtime ==210||this.endtime ==190||this.endtime ==220||this.endtime ==230||this.endtime ==240) {
         let newTime = Date.parse(new Date()) / 1000;
         this.fengpan = false;
         let oidInfo = getOid();
         this.oid_info = oidInfo;
-
         let params = {
           params: {
             game_code: 69,
@@ -1501,9 +995,15 @@ export default {
           let timeStamp = res.data.next.timestap;
 
           if (res.data.msg == 4001) { //  1未登陆
-            this.$router.push({
-              path: '/login'
-            }) // 跳转到登陆
+           sessionStorage.clear();
+						this.isHao = true;
+          	this.title = "您的账户已失效，请重新登录";
+            setTimeout(() => {
+	          	this.isHao = false;
+	          	this.$router.push({
+	            	path: '/login'
+	          	})
+	          },1000)
           } else {
             let moneyX = sessionStorage.getItem('im_money')
 
@@ -1517,6 +1017,9 @@ export default {
             this.endtime = res.data.next.endtime - timeStamp;
             this.round = res.data.next.round;
             let loaclTime = this.endtime + newTime;
+            this.zMoney = res.data.lcurrency;
+            sessionStorage.setItem('im_money', JSON.stringify(res.data.lcurrency))
+
 
             // localStorage.setItem('xgl_time', res.data.next.endtime)
             localStorage.setItem('xgl_time', loaclTime)
@@ -1603,7 +1106,7 @@ button {
                     margin: 0.3rem auto;
                     background: #fff;
                     line-height: 116/60rem;
-
+                    font-size: 8/20rem;
                     border-radius: 3/20rem;
                     padding: 0;
                 }
@@ -3332,7 +2835,7 @@ button {
     }
 }
 .qin {
-    margin-left: -8px;
+   /* margin-left: -8px;*/
 }
 .cqList6 {
     padding-bottom: 2.3rem;
@@ -3766,19 +3269,21 @@ h3 {
         border: 0;
         margin-right: 10/20rem;
         line-height:1.25rem;
+        padding: 0;
     }
     button {
         border: 0;
-        border-radius: 2px;
+       /* border-radius: 2px;*/
     }
     button:nth-of-type(1) {
         color: white;
-        background: rgba(0,0,0,0.5);
+        background: #2f64d4;
         margin-right: 7/20rem;
     }
     button:nth-of-type(2) {
         color: white;
         background: #78c401;
+
     }
     .disable {
         background: #376cd4;
@@ -3799,7 +3304,6 @@ h3 {
         box-shadow: 0 2/20rem 1/20rem rgba(0,0,0,0.5)
       }
     }
-
 }
 .header_bar {
     z-index: 990;
@@ -3928,7 +3432,6 @@ h3 {
 
     }
 }
-
 .bet_bar {
     width: 100%;
     position: fixed;
@@ -3947,34 +3450,51 @@ h3 {
           width: 86/20rem;
           padding:0;
           margin:0;
-          height: 30/20rem;
+          /*height: 30/20rem;
           line-height: 25/20rem;
           border-radius: 3/20rem;
           border: 1/20rem solid #f0f0f0;
-          box-shadow: 0 0 5/20rem #eeeeee inset;
-          text-align: center;
+          box-shadow: 0 0 5/20rem #eeeeee inset;*/
+          /*text-align: center;*/
       }
     }
      >div:nth-of-type(1){
-      width: 140/40rem;
-      // background-color: red;
+      width: 130/46.875rem;
+      background-color: #eeeeee;
+      height: 66/46.875rem;
+      line-height: 66/46.875rem;
+      border-radius: 10%;
+      border: 1px solid #eaeaea;
+      box-sizing: border-box;
+      text-align: center;
+      margin-left: 2%;
 
     }
     >div:nth-of-type(2){
-      width: 270/40rem;
+      width: 382/46.875rem;
+     /* line-height:1rem;*/
+       border: 1px solid #dedede;
+       border-radius:5/20rem;
+         >span{
+        	width:50/46.875rem;
+        	height:45/46.875rem;
+        	line-height:1.15rem;
+        	margin-right:0.2rem;
+        	display: inline-block;
+        	background:url(../../../static/images/moneybao.png) no-repeat;
+        	background-size: 100% 100%;
+        	font-size: 0.5rem;
+        }
       // background-color: red;
       input{
-        width: 100%;
+        width: 80%;
         padding:0rem;
         margin: 0;
-        text-align:right;
-        border: 1px solid #dedede;
-        border-radius:5/20rem;
       }
 
     }
      >div:nth-of-type(3){
-      width: 30%;
+      width:180/46.875rem;
 
     }
     button {
@@ -3983,11 +3503,11 @@ h3 {
         height: 39/20rem;
         border: 0;
         background: #177bdd;
+        padding: 0!important;
         color: white;
     }
 
 }
-
 
 
 .lottery_nav_bar {
@@ -4296,7 +3816,7 @@ h3 {
 .regulation{
   position: fixed;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background: rgba(7,17,27,0.8);
   z-index: 999;
   top: 0;
@@ -4336,11 +3856,17 @@ h3 {
       transform: translate(-29/20rem,-9/20rem);
     }
   }
-  .icon-guanbi{
+  .icon{
     position: absolute;
-    right: 0;
+    right: 4/20rem;
     top: 0;
     font-size: 26/20rem;
   }
 }
+
+.game_main{
+  height: 568/20rem;
+  overflow: scroll;
+}
+
 </style>

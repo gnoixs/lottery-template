@@ -2,7 +2,7 @@
   <!--当新用户或者没选择门店用户进来时  会让选择默认门店-->
   <div >
     <div >
-      <i-header class="color1" title="个人中心"></i-header>
+      <i-header class="color1" title="个人资料"></i-header>
     </div>
     <div class="info">
       <div>
@@ -12,7 +12,7 @@
       </div>
       <div>
         <span>账户余额：</span>
-        <span>{{money}}元</span>
+        <span>{{Number(money).toFixed(2)}}元</span>
         <!--<input type="text" />-->
       </div>
       <div>
@@ -22,7 +22,7 @@
       </div>
       <div>
         <span>邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱：</span>
-        <span>{{email?email:'无'}}</span>
+        <span>{{email=="null"?'无':email}}</span>
         <!--<input type="text" />-->
       </div>
     </div>
@@ -32,7 +32,7 @@
 
 <script>
   import iHeader from '../../components/i-header'
-  /*import {getOid} from '../../api'*/
+//  import {getOid} from '../../api'
   export default {
 
     data() {
@@ -40,13 +40,13 @@
         money:"",
         realname:"",
         usename:"",
-        email:"",
+        email:""
 
       }
     },
     methods: {},
     created() {
-        this.money=sessionStorage.getItem("im_money");
+        this.money=JSON.parse(sessionStorage.getItem("im_money"));
         this.realname=sessionStorage.getItem("im_realname");
         this.usename=sessionStorage.getItem("im_username");
         this.email=sessionStorage.getItem("im_email");

@@ -9,67 +9,70 @@ gd_time// 主页
 
   <lotteryHeader :title="title" :game_code="game_code" @regulation_click="regulation_control=true" ></lotteryHeader>
   <!-- <drawer v-show="showDrawer"></drawer> -->
-
   <!-- <dailog-q v-if="showDailogQ" :titleDate="titleDate" v-on:listenToChildEvent="changeDate"></dailog-q> -->
+  <!--<div class="game_main">-->
+    <lotteryArea class="game_30" :lotteryObj="body" :zMoney="zMoney" :endtime="endtime" :fentime="fentime" v-if="isOk"  gameType="30"></lotteryArea>
 
-  <lotteryArea :lotteryObj="body" :zMoney="zMoney" :endtime="endtime" :fentime="fentime" v-if="isOk"></lotteryArea>
+    <div class="lottery_nav_bar">
+      <ul>
+        <button class="trapezoid color1" v-for="(item,i) in shuju" :class="{active8:item.isCheck}" @click="changeDate(item,i)">
+          <span>{{item.name}}</span>
+        </button>
+      </ul>
+    </div>
+    <div style="padding-top:0.1rem" v-if="shuju.lim.isCheck">
+      <h3>投注方式</h3>
+      <ul class="cqList">
+        <li v-for='(item,index) in datas'>
+          <div v-bind:class="{active3:item.isCheck}" @click='one(item,index)'>
+            <strong>{{item._name}}</strong>
+            <span class="color_money">{{item.odds}}</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <section class='bet cqnc_lmp' ref="seller">
+      <!--<button @click="submite()" type="button">tijiao</button>-->
+      <ul>
+        <li v-for="(item,j) in lotteryList.body">
+          <span class="colortitle">{{item._name}}</span>
+          <ul>
+            <li v-for="(item,i) in item.list">
+              <button class="color4" :class="{active3:item.isCheck}" @click="isCheck(j,i,item)" :disabled="fengpan||round=='loading'">
+                <span>{{item.name}}</span>
+                <span class="odd">{{(fengpan||round=='loading')?"封盘":item.odds}}</span>
+               </button>
+            </li>
+          </ul>
+        </li>
+      </ul>
 
-  <div class="lottery_nav_bar">
-    <ul>
-      <button class="trapezoid color1" v-for="(item,i) in shuju" :class="{active8:item.isCheck}" @click="changeDate(item,i)">
-        <span>{{item.name}}</span>
-      </button>
-    </ul>
-  </div>
-  <div style="padding-top:0.1rem" v-if="shuju.lim.isCheck">
-    <h3>投注方式</h3>
-    <ul class="cqList">
-      <li v-for='(item,index) in datas'>
-        <div v-bind:class="{active3:item.isCheck}" @click='one(item,index)'>
-          <strong>{{item._name}}</strong>
-          <span class="color_money">{{item.odds}}</span>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <section class='bet cqnc_lmp' ref="seller">
-    <!--<button @click="submite()" type="button">tijiao</button>-->
-    <ul>
+    </section>
 
-
-      <li v-for="(item,j) in lotteryList.body">
-        <span class="colortitle">{{item._name}}</span>
-        <ul>
-          <li v-for="(item,i) in item.list">
-
-            <button class="color4" :class="{active3:item.isCheck}" @click="isCheck(j,i,item)" :disabled="fengpan||round=='loading'">
-              <span>{{item.name}}</span>
-              <span class="odd">{{(fengpan||round=='loading')?"封盘":item.odds}}</span>
-
-              </button>
-
-          </li>
-        </ul>
-      </li>
-    </ul>
-
-  </section>
+  <!--</div>-->
 
   <section class="bet_bar">
    <div>
-      <i class=" iconfont_reset"></i>
+     <!-- <i class=" iconfont_reset"></i>-->
       <span  class="qin" @click="qingkong">重置</span>
     </div>
-    <div><input type="number" v-model="money_s" placeholder="输入金额" @input="changes_m()" min="1"/></div>
-    <div><button :class="{color1:isBlue}" type="button" :disabled="!isBlue" @click="subMit">确认下注</button><span class="color_shuzi" v-show="xshuzi>0">{{xshuzi}}</span></div>
-
+    <div><span  style="color:#FFFFFF"  v-show="xshuzi>0">{{xshuzi}}</span><input pattern="[0-9]*" v-model="money_s" placeholder="输入金额" @input="changes_m()" min="1"/></div>
+    <div><button class="gdcolor"  :class="{color1:isBlue}" type="button" :disabled="!isBlue" @click="subMit">确认下注</button></div>
   </section>
-
 
   <div v-if="isShowS">
     <div class="modal_box_feedback">
-      <div>{{wenzi}}</div>
-    </div>
+         <div class="modal_div">
+        		<div class="modal_header color1">
+        			<span>通知</span>
+        			<i></i>
+        		</div>
+        		<div class="modal_foot">
+        			<div ref="rscenter"></div>
+        			<p>{{wenzi}}</p>
+        		</div>
+        </div>
+      </div>
   </div>
   <!-- <foot-guide></foot-guide> -->
   <div :style='de?"display:block":"display:none"' style="position: fixed;top:0;left:0;background:#000;opacity:.8;width:100%;height:100%;z-index:6">
@@ -77,102 +80,6 @@ gd_time// 主页
       <mu-circular-progress style="" :size="40" />
     </div>
   </div>
-
-
-    <div v-show="regulation_control" class="regulation">
-      <div>
-        <div class="header_regu">
-          <div></div>
-          <h5>广东快乐十分</h5>
-          <div></div>
-        </div>
-        <div>
-          <p>1.两面：指单、双；大、小、尾大、尾小。</p>
-        </div>
-        <div>
-          <p>单、双：号码为双数叫双，如8、16；号码为单数叫单，如19、5。</p>
-        </div>
-        <div>
-          <p>大、小：开出之号码大于或等于11为大，小于或等于10为小。</p>
-        </div>
-        <div>
-          <p>尾大、尾小：开出之尾数大于或等于5为尾大，小于或等于4为尾小。</p>
-        </div>
-        <div>
-          <p>每一个号码为一投注组合，假如投注号码为开奖号码并在所投的球位置，视为中奖，其余情形视为不中奖。</p>
-        </div>
-        <div>
-          <p>2.中发白</p>
-        </div>
-        <div>
-          <p>中：开出之号码为01、02、03、04、05、06、07</p>
-        </div>
-        <div>
-          <p>发：开出之号码为08、09、10、11、12、13、14</p>
-        </div>
-        <div>
-          <p>白：开出之号码为15、16、17、18、19、20</p>
-        </div>
-        <div>
-          <p>3.方位</p>
-        </div>
-        <div>
-          <p>东：开出之号码为01、05、09、13、17</p>
-        </div>
-        <div>
-          <p>南：开出之号码为02、06、10、14、18</p>
-        </div>
-        <div>
-          <p>西：开出之号码为03、07、11、15、19</p>
-        </div>
-        <div>
-          <p>北：开出之号码为04、08、12、16、20</p>
-        </div>
-        <div>
-          <p>13.龙虎以第一球的中奖号码和第八球的中奖号码做为对奖号码。</p>
-        </div>
-        <div>
-          <p>龙：开出之号码第一球的中奖号码大于第八球的中奖号码。如 第一球开出14 第八球开出09；第一球开出17 第八球开出08；第一球开出05 第八球开出01...中奖为龙。</p>
-        </div>
-        <div>
-          <p>虎：开出之号码第一球的中奖号码小于第八球的中奖号码。如 第一球开出14 第八球开出16；第一球开出13 第八球开出18；第一球开出05 第八球开出08...中奖为虎。</p>
-        </div>
-        <div>
-          <p>14.正码</p>
-        </div>
-        <div>
-          <p>从01至20中任意选择1个号码进行投注， 投注号码与开奖号码中任意1个位置的号码相符，即中奖。</p>
-        </div>
-        <div>
-          <p>4.总和单双：所有8个开奖号码的数字总和值是单数为总和单，如数字总和值是31、51；所有8个开奖号码的数字总和值是双数为总和双，如数字总和是42、80；假如投注组合符合中奖结果，视为中奖，其余情形视为不中奖。</p>
-        </div>
-        <div>
-          <p>5.总和大小：所有8个开奖号码的数字总和值85到132为总大；所有8个开奖号码的数字总和值36到83为总分小；所有8个开奖号码的数字总和值为84打和；如开奖号码为01、20、02、08、17、09、11，数字总和是68，则总分小。假如投注组合符合中奖结果，视为中奖，其余情形视为不中奖，打和不计算结果。</p>
-        </div>
-        <div>
-          <p>6.总尾大小：所有8个开奖号码的数字总和数值的个位数大于或等于5为总尾大，小于或等于4为总尾小；假如投注组合符合中奖结果，视为中奖，其余情形视为不中奖。</p>
-        </div>
-        <div>
-          <p>7.选二任选：指从01至20中任意选择2个号码对开奖号码中任意2个位置的投注。 投注号码与开奖号码中任意2个位置的号码相符，即中奖。</p>
-        </div>
-        <div>
-          <p>8.选二连组：指从01至20中任意选择2个号码对开奖号码中按开奖顺序出现的2个连续位置的投注。 投注号码与开奖号码中按开奖顺序出现的2个连续位置的号码相符（顺序不限），即中奖。</p>
-        </div>
-        <div>
-          <p>9.选三任选：指从01至20中任意选择3个号码对开奖号码中任意3个位置的投注。 投注号码与开奖号码中任意3个位置的号码相符，即中奖。</p>
-        </div>
-        <div>
-          <p>10.选三前组：指从01至20中任意选择3个号码对开奖号码中按开奖顺序出现的前3个连续位置的投注。 投注号码与开奖号码中按开奖顺序出现的前3个位置的号码相符（顺序不限），即中奖。</p>
-        </div>
-        <div>
-          <p>11.选四任选：指从01至20中任意选择4个号码，对开奖号码中任意4个位置的投注。 投注号码与开奖号码中任意4个位置的号码相符，即中奖。</p>
-        </div>
-        <div>
-          <p>12.选五任选：指从01至20中任意选择5个号码，对开奖号码中任意5个位置的投注。 投注号码与开奖号码中任意5个位置的号码相符，即中奖。</p>
-        </div>
-      </div>
-      <i @click="regulation_control=false" class="icon-guanbi iconfont"></i>
-    </div>
 
 
 
@@ -190,12 +97,12 @@ import dailogQ from '../../components/dailogQ.vue'
 import dailogS from '../../components/dailogS.vue'
 //import BScroll from 'better-scroll'
 
-/*import {
-  loginTrue,
-  getOid,
-  getKlsf,
-  getUrl
-} from '../../api'*/
+//import {
+//  loginTrue,
+//  getOid,
+//  getKlsf,
+//  getUrl
+//} from '../../api'
 // import drawer from '../../components/drawer'
 
 export default {
@@ -269,6 +176,7 @@ export default {
       money_s: null,
       round: 0,
       n_1: false,
+      isHao : false,
       dadiao: "lmp"
       // pcznavc_a:1//二級選項卡，默認顯示兩面盤
     }
@@ -287,11 +195,15 @@ export default {
 
 
           if (res.data.msg == "4001") {
-            // let timeStamp = res.data.next.timestap;
-
-            this.$router.push({
-              path: '/login'
-            }) // 跳转到登陆
+            sessionStorage.clear();
+						this.isHao = true;
+          	this.title = "您的账户已失效，请重新登录";
+            setTimeout(() => {
+	          	this.isHao = false;
+	          	this.$router.push({
+	            	path: '/login'
+	          	})
+	          },1000)
           } else {
             this.zMoney = res.data.money;
             sessionStorage.setItem('im_money', JSON.stringify(res.data.money))
@@ -309,14 +221,13 @@ export default {
       this.lotteryList = getKlsf().lim
       this.object={};
       this.xshuzi = 0;
-
       item.isCheck = true;
       this.lianxu.index = item.inde;
       this.lianxu.keys = item.key_s;
-
-
     },
     changes_m() {
+
+      this.money_s = this.money_s.replace(/[^0-9]/g, "");
 
       if (!this.isEmptyObject(this.object) && this.money_s > 0) {
         this.isBlue = true;
@@ -529,10 +440,15 @@ export default {
         this.isOk = true;
 
         if (res.data.msg == "4001") {
-          // let timeStamp = res.data.next.timestap;
-          this.$router.push({
-            path: '/login'
-          }) // 跳转到登陆
+          sessionStorage.clear();
+						this.isHao = true;
+          	this.title = "您的账户已失效，请重新登录";
+            setTimeout(() => {
+	          	this.isHao = false;
+	          	this.$router.push({
+	            	path: '/login'
+	          	})
+	          },1000)
         } else {
           let moneyX = sessionStorage.getItem('im_money')
 
@@ -551,6 +467,9 @@ export default {
           localStorage.setItem('gd_body', JSON.stringify(res.data))
           this.lotteryList = getKlsf().lmp;
           this.numberList = res.data.last.number;
+          this.zMoney = res.data.lcurrency;
+          sessionStorage.setItem('im_money', JSON.stringify(res.data.lcurrency))
+
           this.round = res.data.next.round;
           this.roundCha = Number(res.data.next.round.split("-")[1]) - Number(res.data.last.round.split("-")[1]);
           localStorage.setItem('gd_roundCha', JSON.stringify(this.roundCha))
@@ -578,7 +497,7 @@ export default {
   },
   watch: {
     endtime: function() {
-      if (this.endtime == 0||this.endtime ==540||this.endtime ==550||this.endtime==530||this.endtime==500) {
+      if (this.endtime == 0||this.endtime ==540||this.endtime ==440||this.endtime ==450||this.endtime ==550||this.endtime==530||this.endtime==500||this.endtime ==560||this.endtime ==570||this.endtime ==580) {
         let newTime = Date.parse(new Date()) / 1000;
         this.fengpan = false;
         let oidInfo = getOid();
@@ -597,9 +516,15 @@ export default {
           let timeStamp = res.data.next.timestap;
 
           if (res.data.msg == 4001) { //  1未登陆
-            this.$router.push({
-              path: '/login'
-            }) // 跳转到登陆
+            sessionStorage.clear();
+						this.isHao = true;
+          	this.title = "您的账户已失效，请重新登录";
+            setTimeout(() => {
+	          	this.isHao = false;
+	          	this.$router.push({
+	            	path: '/login'
+	          	})
+	          },1000)
           } else {
             // this.shuju = getKlsf();
             // this.lotteryList = getKlsf().lmp;
@@ -616,6 +541,9 @@ export default {
             // this.lotteryList = getKlsf().lmp;
             // this.$refs.seller.className = "cqnc_lmp bet";
             this.numberList = res.data.last.number;
+            this.zMoney = res.data.lcurrency;
+            sessionStorage.setItem('im_money', JSON.stringify(res.data.lcurrency))
+
             this.round = res.data.next.round;
             this.roundCha = Number(res.data.next.round.split("-")[1]) - Number(res.data.last.round.split("-")[1]);
             localStorage.setItem('gd_roundCha', JSON.stringify(this.roundCha))
@@ -626,7 +554,7 @@ export default {
         })
 
 
-      } else if (this.endtime <= 120 && this.endtime > 0) {
+      } else if (this.endtime <= 60 && this.endtime > 0) {
 
         this.qingkong();
         this.xshuzi = 0;
@@ -1041,28 +969,30 @@ h3 {
         border: 0;
         margin-right: 10/20rem;
         line-height:1.25rem;
+        padding: 0;
     }
     button {
         border: 0;
-        border-radius: 2px;
+       /* border-radius: 2px;*/
     }
     button:nth-of-type(1) {
         color: white;
-        background: rgba(0,0,0,0.5);
+        background: #2f64d4;
         margin-right: 7/20rem;
     }
     button:nth-of-type(2) {
         color: white;
         background: #78c401;
+
     }
     .disable {
         background: #376cd4;
     }
-    > div:nth-of-type(3) {
-        position: relative;
+    >div:nth-of-type(3){
+      position: relative;
       font-size: 15/20rem;
-        > span {
-            font-size: 12/20rem;
+      >span{
+        font-size: 12/20rem;
         position: absolute;
         top:-11/20rem;
         left: -7/20rem;
@@ -1072,9 +1002,10 @@ h3 {
         border-radius: 10/20rem;
         background: red;
         box-shadow: 0 2/20rem 1/20rem rgba(0,0,0,0.5)
-        }
+      }
     }
 }
+
 .header_bar {
     z-index: 990;
     background: #146cdc;
@@ -1218,34 +1149,51 @@ h3 {
           width: 86/20rem;
           padding:0;
           margin:0;
-          height: 30/20rem;
+          /*height: 30/20rem;
           line-height: 25/20rem;
           border-radius: 3/20rem;
           border: 1/20rem solid #f0f0f0;
-          box-shadow: 0 0 5/20rem #eeeeee inset;
-          text-align: center;
+          box-shadow: 0 0 5/20rem #eeeeee inset;*/
+          /*text-align: center;*/
       }
     }
      >div:nth-of-type(1){
-      width: 140/40rem;
-      // background-color: red;
+      width: 130/46.875rem;
+      background-color: #eeeeee;
+      height: 66/46.875rem;
+      line-height: 66/46.875rem;
+      border-radius: 10%;
+      border: 1px solid #eaeaea;
+      box-sizing: border-box;
+      text-align: center;
+      margin-left: 2%;
 
     }
     >div:nth-of-type(2){
-      width: 270/40rem;
+      width: 382/46.875rem;
+     /* line-height:1rem;*/
+       border: 1px solid #dedede;
+       border-radius:5/20rem;
+         >span{
+        	width:50/46.875rem;
+        	height:45/46.875rem;
+        	line-height:1.15rem;
+        	margin-right:0.2rem;
+        	display: inline-block;
+        	background:url(../../../static/images/moneybao.png) no-repeat;
+        	background-size: 100% 100%;
+        	font-size: 0.5rem;
+        }
       // background-color: red;
       input{
-        width: 100%;
+        width: 80%;
         padding:0rem;
         margin: 0;
-        text-align:right;
-        border: 1px solid #dedede;
-        border-radius:5/20rem;
       }
 
     }
      >div:nth-of-type(3){
-      width: 30%;
+      width:180/46.875rem;
 
     }
     button {
@@ -1254,10 +1202,12 @@ h3 {
         height: 39/20rem;
         border: 0;
         background: #177bdd;
+        padding: 0!important;
         color: white;
     }
 
 }
+
 
 .iconfont_reset {
   width: 1rem;
@@ -1339,7 +1289,7 @@ h3 {
     font-size: 25/20rem;
 }
 .qin{
-  margin-left:-8px;
+  /*margin-left:-8px;*/
 }
 .lajiton-active {
     color: #36aafb;
@@ -1393,7 +1343,7 @@ h3 {
 .regulation{
   position: fixed;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background: rgba(7,17,27,0.8);
   z-index: 999;
   top: 0;
@@ -1434,11 +1384,17 @@ h3 {
       transform: translate(-29/20rem,-9/20rem);
     }
   }
-  .icon-guanbi{
+  .icon{
     position: absolute;
-    right: 0;
+    right: 4/20rem;
     top: 0;
     font-size: 26/20rem;
   }
 }
+
+.game_main{
+  height: 568/20rem;
+  overflow: scroll;
+}
+
 </style>
