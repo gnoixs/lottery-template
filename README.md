@@ -5,7 +5,7 @@
 ```
 1、vue2.0 + vue-router + vuex
 2、Axios 请求数据
-3、Css 可使用 less sass  
+3、Css 可使用 less sass
 4、Muse-ui UI组件库
 5、Webpack 打包
 6、使用rem自适应布局
@@ -16,9 +16,9 @@
 
 ##目录结构
 ```
-├── build              // 构建服务和webpack配置  
-├── config             // 项目不同环境的配置        
-├── dist               // 项目build目录         
+├── build              // 构建服务和webpack配置
+├── config             // 项目不同环境的配置
+├── dist               // 项目build目录
 ├── index.html         // 项目入口文件
 ├── package.json       // 项目配置文件
 ├── src                // 生产目录
@@ -32,7 +32,7 @@
 ├── static             // 放置静态图片
 ├── package.json       // 项目依赖
 ├── README.md
-```      
+```
 ### 项目截图
 
 ![首页演示图片](./images/index.png)
@@ -59,3 +59,4 @@ npm run build --report
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 xiaowen
 ocen
+test
